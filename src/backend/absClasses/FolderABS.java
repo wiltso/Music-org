@@ -27,17 +27,46 @@ public abstract class FolderABS implements FolderIF<Album>, HierarchyIF<FolderAB
 			parent.addChild(this);
 		}
 	}
-	
-	public String getName() {
-		return name;
+
+
+	/*
+	 * Adds a Album to this folder
+	 */
+	public void addAlbum(Album newAlbum) {
+		albums.add(newAlbum);
 	}
+	/*
+	 * Adds a folder to be this folders subfolder
+	 */
+	public void addChild(FolderABS child) {
+		subFolders.add(child);
+	}
+	/*
+	 * Changes the name of this folder
+	 */
 	public void changeName(String newName) {
 		name = newName;
 	}
-		
-	public FolderABS getParent() {
-		return this.parent;
-	};
+	/*
+	 * Deletes a album from this folder
+	 */
+	public void deleteAlbum(int index) {
+		this.albums.remove(index);
+	}
+	public void deleteSubfolder(int index) {
+		this.subFolders.remove(index);
+	}
+	public void deleteSubfolder(FolderABS object) {
+		this.subFolders.remove(object);
+	}
+	public boolean hasChildren() {
+		return !this.subFolders.isEmpty();
+	}
+	public boolean hasParent() {
+		return this.parent != null;
+	}
+
+	
 	public List<FolderABS> getChildren(){
 		return this.subFolders;
 	};
@@ -62,36 +91,21 @@ public abstract class FolderABS implements FolderIF<Album>, HierarchyIF<FolderAB
 			return null;
 		}
 	};
-	public boolean hasChildren() {
-		return !this.subFolders.isEmpty();
-	};
-	public boolean hasParent() {
-		return this.parent != null;
-	};
-	public void addAlbum(Album newAlbum) {
-		this.albums.add(newAlbum);
-	}
+
+
 	public Album getAlbum(int index) {
 		return this.albums.get(index);
 	}
-	public void addChild(FolderABS child) {
-		this.subFolders.add(child);
+	public FolderABS getParent() {
+		return this.parent;
 	}
-	public void deleteAlbum(int index) {
-		this.albums.remove(index);
-	}
+	public String getName() {
+		return name;
+	}		
 	
 	public abstract boolean changeParent(FolderABS newParent);
-	public abstract List<Album> getAlbums();
 	public abstract boolean delete();
 	public abstract FolderABS getRoot();
 
-	
-	public void deleteSubfolder(int index) {
-		this.subFolders.remove(index);
-	}
-	public void deleteSubfolder(FolderABS object) {
-		this.subFolders.remove(object);
-	}
-	
+	public abstract List<Album> getAlbums();
 }

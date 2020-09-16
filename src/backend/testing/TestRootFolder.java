@@ -37,6 +37,10 @@ class TestRootFolder {
 	@Test
 	void testRootFolderName() {
 		assertEquals(rootFolder.getName(), "All Sound Clips");
+		Folder child2 = new Folder("Child2", rootFolder, new ArrayList<Album>(), new ArrayList<FolderABS>());
+		assertEquals(child2.getName(), "Child2");
+		rootFolder.changeName("Name");
+		assertEquals(rootFolder.getName(), "Name");
 	}
 	
 	@Test

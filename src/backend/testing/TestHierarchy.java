@@ -119,7 +119,4 @@ class TestHierarchy {
 		assertEquals(subFolders.contains(child2), false);
 		assertEquals(subFolders.contains(child3), false);
 	}
-	
-	
-
 }
