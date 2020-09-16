@@ -5,6 +5,7 @@ import java.util.List;
 public interface HierarchyIF<E> {
 
 	public E getParent();
+	public E getRoot();
 	public List<E> getChildren();
 	public List<E> getAllChildren();
 	public List<E> getSiblings();

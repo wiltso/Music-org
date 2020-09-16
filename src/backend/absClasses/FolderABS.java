@@ -9,16 +9,32 @@ import backend.interfaces.FolderIF;
 
 public abstract class FolderABS implements FolderIF<Album>, HierarchyIF<FolderABS>  {
 
+	private String name;
 	protected FolderABS parent;
 	protected List<Album> albums;
 	protected List<FolderABS> subFolders;
 	
-	public FolderABS(FolderABS parent, List<Album> albumList, List<FolderABS> subFoldersList) {
-		assert parent != null;
+	public FolderABS(String folderName, FolderABS parent, List<Album> albumList, List<FolderABS> subFoldersList) {
 		assert albumList != null;
+		assert folderName != null;
 		assert subFoldersList != null;
 		this.parent = parent;
+		this.name = folderName;
+		this.albums = albumList;
+		this.subFolders = subFoldersList;
+		
+		if (this.hasParent()) {
+			parent.addChild(this);
+		}
 	}
+	
+	public String getName() {
+		return name;
+	}
+	public void changeName(String newName) {
+		name = newName;
+	}
+		
 	public FolderABS getParent() {
 		return this.parent;
 	};
@@ -66,6 +82,7 @@ public abstract class FolderABS implements FolderIF<Album>, HierarchyIF<FolderAB
 	public abstract boolean changeParent(FolderABS newParent);
 	public abstract List<Album> getAlbums();
 	public abstract boolean delete();
+	public abstract FolderABS getRoot();
 
 	
 	public void deleteSubfolder(int index) {

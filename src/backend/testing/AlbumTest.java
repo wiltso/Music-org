@@ -3,7 +3,6 @@ package backend.testing;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +27,7 @@ class AlbumTest {
 	
 	@BeforeEach
 	void setUp() throws Exception {
-		album = new Album();
+		album = new Album(new ArrayList<SoundClip>());
 	}
 
 	@Test

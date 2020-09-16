@@ -1,6 +1,5 @@
 package backend;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import backend.interfaces.AlbumIF;
@@ -8,10 +7,7 @@ import backend.interfaces.AlbumIF;
 public class Album implements AlbumIF<SoundClip>{
 	
 	private List<SoundClip> songs;
-	
-	public Album() {
-		songs = new ArrayList<SoundClip>();
-	}
+
 	public Album(List<SoundClip> songList) {
 		songs = songList;
 	}

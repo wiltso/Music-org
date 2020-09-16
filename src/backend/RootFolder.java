@@ -7,7 +7,7 @@ import backend.absClasses.FolderABS;
 
 public class RootFolder extends FolderABS{
 	public RootFolder() {
-		super(null, new ArrayList<Album>(), new ArrayList<FolderABS>());
+		super("All Sound Clips", null, new ArrayList<Album>(), new ArrayList<FolderABS>());
 	}
 
 	@Override
@@ -25,12 +25,16 @@ public class RootFolder extends FolderABS{
 
 	@Override
 	public boolean changeParent(FolderABS newParent) {
-		this.parent = newParent;
-		return true;
+		return false;
 	}
 
 	@Override
 	public boolean delete() {
 		return false;
+	}
+
+	@Override
+	public FolderABS getRoot() {
+		return this;
 	}
 }

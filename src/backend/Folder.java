@@ -6,8 +6,8 @@ import backend.absClasses.FolderABS;
 
 public class Folder extends FolderABS{
 
-	public Folder(FolderABS parent, List<Album> albumList, List<FolderABS> subFoldersList) {
-		super(parent, albumList, subFoldersList);
+	public Folder(String folderName, FolderABS parent, List<Album> albumList, List<FolderABS> subFoldersList) {
+		super(folderName, parent, albumList, subFoldersList);
 	}
 	@Override
 	public List<Album> getAlbums() {
@@ -23,8 +23,14 @@ public class Folder extends FolderABS{
 
 	@Override
 	public boolean changeParent(FolderABS newParent) {
+		this.parent.deleteSubfolder(this);
 		this.parent = newParent;
-		return false;
+		this.parent.addChild(this);
+		return true;
+	}
+	@Override
+	public FolderABS getRoot() {
+		return parent.getRoot();
 	}
 
 }
