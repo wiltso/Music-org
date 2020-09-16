@@ -3,7 +3,6 @@ package backend.testing;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -66,6 +65,8 @@ class TestHierarchy {
 		assertEquals(child2.getParent(), rootFolder);
 		assertEquals(child3.getParent(), rootFolder);
 		assertEquals(rootFolder.getParent(), null);
+		assertEquals(child2.getChildren(), new ArrayList<FolderABS>());
+		assertEquals(child3.getChildren(), new ArrayList<FolderABS>());
 		
 	}
 	
@@ -73,9 +74,52 @@ class TestHierarchy {
 	void testGetSiblings() {
 		child2.changeParent(rootFolder);
 		child3.changeParent(rootFolder);
-		System.out.print(child2.getSiblings());
+		
+		List<FolderABS> siblings = child3.getSiblings();
+		
+		assertEquals(siblings.contains(child3), false);
+		assertEquals(siblings.contains(child1), true);
+		assertEquals(siblings.contains(child2), true);
 	}
 	
+	@Test
+	void testChildrenAndParent() {
+		assertEquals(rootFolder.hasParent(), false);
+		assertEquals(child1.hasParent(), true);
+		assertEquals(child2.hasParent(), true);
+		assertEquals(child3.hasParent(), true);
+		
+		assertEquals(rootFolder.hasChildren(), true);
+		assertEquals(child1.hasChildren(), true);
+		assertEquals(child2.hasChildren(), true);
+		assertEquals(child3.hasChildren(), false);
+	}
+	
+	@Test
+	void testGetAllChildren() {
+		List<FolderABS> siblings = rootFolder.getAllChildren();
+		assertEquals(siblings.contains(rootFolder), false);
+		assertEquals(siblings.contains(child3), true);
+		assertEquals(siblings.contains(child1), true);
+		assertEquals(siblings.contains(child2), true);
+	}
+	
+	@Test
+	void testDelete() {
+		List<FolderABS> siblings = rootFolder.getAllChildren();
+		assertEquals(siblings.contains(child1), true);
+		assertEquals(siblings.contains(child2), true);
+		assertEquals(siblings.contains(child3), true);
 
+		child3.delete();
+		assertEquals(child2.getChildren(), new ArrayList<FolderABS>());
+		child1.delete();
+		List<FolderABS> subFolders = rootFolder.getAllChildren();
+		assertEquals(subFolders.contains(child1), false);
+		assertEquals(subFolders.contains(child2), false);
+		assertEquals(subFolders.contains(child3), false);
+	}
+	
+	
 
 }

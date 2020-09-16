@@ -55,7 +55,9 @@ public abstract class FolderABS implements FolderIF<Album>, HierarchyIF<FolderAB
 	}
 	public List<FolderABS> getSiblings(){
 		if (this.hasParent() == true) {
-			return this.parent.getChildren();
+			List<FolderABS> children = this.parent.getChildren();
+			children.remove(this);
+			return children;
 		} else {
 			return null;
 		}
