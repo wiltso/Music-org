@@ -13,7 +13,10 @@ public abstract class FolderABS implements FolderIF<Album>, HierarchyIF<FolderAB
 	protected List<Album> albums;
 	protected List<FolderABS> subFolders;
 	
-	public FolderABS(FolderABS parent) {
+	public FolderABS(FolderABS parent, List<Album> albumList, List<FolderABS> subFoldersList) {
+		assert parent != null;
+		assert albumList != null;
+		assert subFoldersList != null;
 		this.parent = parent;
 	}
 	public FolderABS getParent() {

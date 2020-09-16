@@ -7,7 +7,7 @@ import backend.absClasses.FolderABS;
 
 public class RootFolder extends FolderABS{
 	public RootFolder() {
-		super(null);
+		super(null, new ArrayList<Album>(), new ArrayList<FolderABS>());
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package backend;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import backend.interfaces.AlbumIF;
@@ -8,19 +9,26 @@ public class Album implements AlbumIF<SoundClip>{
 	
 	private List<SoundClip> songs;
 	
+	public Album() {
+		songs = new ArrayList<SoundClip>();
+	}
+	public Album(List<SoundClip> songList) {
+		songs = songList;
+	}
+	
 	public List<SoundClip> getSongs() {
-		return this.songs;
+		return songs;
 	}
 	
 	public void addSong(SoundClip song) {
-		this.songs.add(song);
+		songs.add(song);
 	}
 	
 	public SoundClip getSong(int index) {
-		return this.songs.get(index);
+		return songs.get(index);
 	}
 	
 	public void deleteSong(int index) {
-		this.songs.remove(index);
+		songs.remove(index);
 	}
 }

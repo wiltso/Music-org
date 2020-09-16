@@ -6,10 +6,9 @@ import backend.absClasses.FolderABS;
 
 public class Folder extends FolderABS{
 
-	public Folder(FolderABS parent) {
-		super(parent);
+	public Folder(FolderABS parent, List<Album> albumList, List<FolderABS> subFoldersList) {
+		super(parent, albumList, subFoldersList);
 	}
-
 	@Override
 	public List<Album> getAlbums() {
 		return this.albums;
