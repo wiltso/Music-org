@@ -25,10 +25,10 @@ class TestHierarchy {
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
 		testAlbums = new ArrayList<Album>();
-		testAlbums.add(new Album(new ArrayList<SoundClip>()));
-		testAlbums.add(new Album(new ArrayList<SoundClip>()));
-		testAlbums.add(new Album(new ArrayList<SoundClip>()));
-		testAlbums.add(new Album(new ArrayList<SoundClip>()));
+		testAlbums.add(new Album("Album1", "Album1 content", new ArrayList<SoundClip>()));
+		testAlbums.add(new Album("Album2", "Album2 content", new ArrayList<SoundClip>()));
+		testAlbums.add(new Album("Album3", "Album3 content", new ArrayList<SoundClip>()));
+		testAlbums.add(new Album("Album4", "Album4 content", new ArrayList<SoundClip>()));
 	}
 	
 	@BeforeEach

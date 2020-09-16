@@ -27,7 +27,7 @@ class AlbumTest {
 	
 	@BeforeEach
 	void setUp() throws Exception {
-		album = new Album(new ArrayList<SoundClip>());
+		album = new Album("Album1", "Album1 content", new ArrayList<SoundClip>());
 	}
 
 	@Test
