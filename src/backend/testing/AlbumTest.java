@@ -1,5 +1,6 @@
 package backend.testing;
 
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
@@ -30,6 +31,69 @@ class AlbumTest {
 		album = new Album("Album1", "Album1 content", new ArrayList<SoundClip>());
 	}
 
+	@Test
+	void testCreation() {
+		boolean errorThrown = false;
+		try {
+			album = new Album("Album1", null, new ArrayList<SoundClip>());
+		} catch (AssertionError e) {
+			errorThrown = true;
+		}
+		assertFalse(errorThrown);
+		try {
+			errorThrown = false;
+			album = new Album(null, null, new ArrayList<SoundClip>());
+		} catch (AssertionError e) {
+			errorThrown = true;
+		}
+		assertTrue(errorThrown);
+		try {
+			errorThrown = false;
+			album = new Album("Album1", null, null);
+		} catch (AssertionError e) {
+			errorThrown = true;
+		}
+		assertTrue(errorThrown);
+	}
+	
+	@Test
+	void testNameAndContent() {
+		boolean errorThrown = false;
+		try {
+			album.setName("test");
+		} catch (AssertionError e) {
+			errorThrown = true;
+		}
+		assertFalse(errorThrown);
+		assertTrue(album.getName().equals("test"));
+		assertFalse(album.getName().equals("Test"));
+		try {
+			errorThrown = false;
+			album.setName(null);
+		} catch (AssertionError e) {
+			errorThrown = true;
+		}
+		assertTrue(errorThrown);
+		try {
+			errorThrown = false;
+			album.setContent("Test2");
+		} catch (AssertionError e) {
+			errorThrown = true;
+		}
+		assertFalse(errorThrown);
+		assertTrue(album.getContent().equals("Test2"));
+		assertFalse(album.getContent().equals("test2"));
+		try {
+			errorThrown = false;
+			album.setContent(null);
+		} catch (AssertionError e) {
+			errorThrown = true;
+		}
+		assertFalse(errorThrown);
+		assertFalse("Test2".equals(album.getContent()));
+		assert album.getContent() == null;
+	}
+	
 	@Test
 	void testSongAddition() {
 		SoundClip sound1 = new SoundClip(testFiles.get(0));
@@ -89,5 +153,74 @@ class AlbumTest {
 		assertEquals(album.getSong(2), sound4);
 
 	}
+	
+	@Test
+	void testDuplicateSong() {
+		SoundClip sound1 = new SoundClip(testFiles.get(0));
+		SoundClip sound2 = new SoundClip(testFiles.get(0));
+		album.addSong(sound1);
+		boolean errorThrown = false;
+		try {
+			album.addSong(sound2);
+		} catch (AssertionError e) {
+			errorThrown = true;
+		}
+		assertTrue(errorThrown);
+	}
+	
+	@Test
+	void testSongGetting() {
+		SoundClip sound1 = new SoundClip(testFiles.get(0));
+		album.addSong(sound1);
+		boolean errorThrown = false;
+		try {
+			album.getSong(-1);
+		} catch (AssertionError e) {
+			errorThrown = true;
+		}
+		assertTrue(errorThrown);
+		try {
+			errorThrown = false;
+			album.getSong(1);
+		} catch (AssertionError e) {
+			errorThrown = true;
+		}
+		assertTrue(errorThrown);
+		try {
+			errorThrown = false;
+			album.getSong(0);
+		} catch (AssertionError e) {
+			errorThrown = true;
+		}
+		assertFalse(errorThrown);
+	}
+	
+	@Test
+	void testSongDelete() {
+		SoundClip sound1 = new SoundClip(testFiles.get(0));
+		album.addSong(sound1);
+		boolean errorThrown = false;
+		try {
+			album.deleteSong(-1);
+		} catch (AssertionError e) {
+			errorThrown = true;
+		}
+		assertTrue(errorThrown);
+		try {
+			errorThrown = false;
+			album.deleteSong(1);
+		} catch (AssertionError e) {
+			errorThrown = true;
+		}
+		assertTrue(errorThrown);
+		try {
+			errorThrown = false;
+			album.deleteSong(0);
+		} catch (AssertionError e) {
+			errorThrown = true;
+		}
+		assertFalse(errorThrown);
+	}
+	
 
 }

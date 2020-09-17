@@ -59,12 +59,12 @@ class TestHierarchy {
 		boolean child2Return = child2.changeParent(rootFolder);
 		boolean child3Return = child3.changeParent(rootFolder);
 		boolean rootReturn = rootFolder.changeParent(child3);
-		assertEquals(child2Return, true);
-		assertEquals(child3Return, true);
-		assertEquals(rootReturn, false);
+		assertTrue(child2Return);
+		assertTrue(child3Return);
+		assertFalse(rootReturn);
 		assertEquals(child2.getParent(), rootFolder);
 		assertEquals(child3.getParent(), rootFolder);
-		assertEquals(rootFolder.getParent(), null);
+		assertNull(rootFolder.getParent());
 		assertEquals(child2.getChildren(), new ArrayList<FolderABS>());
 		assertEquals(child3.getChildren(), new ArrayList<FolderABS>());
 		
@@ -77,46 +77,46 @@ class TestHierarchy {
 		
 		List<FolderABS> siblings = child3.getSiblings();
 		
-		assertEquals(siblings.contains(child3), false);
-		assertEquals(siblings.contains(child1), true);
-		assertEquals(siblings.contains(child2), true);
+		assertFalse(siblings.contains(child3));
+		assertTrue(siblings.contains(child1));
+		assertTrue(siblings.contains(child2));
 	}
 	
 	@Test
 	void testChildrenAndParent() {
-		assertEquals(rootFolder.hasParent(), false);
-		assertEquals(child1.hasParent(), true);
-		assertEquals(child2.hasParent(), true);
-		assertEquals(child3.hasParent(), true);
+		assertFalse(rootFolder.hasParent());
+		assertTrue(child1.hasParent());
+		assertTrue(child2.hasParent());
+		assertTrue(child3.hasParent());
 		
-		assertEquals(rootFolder.hasChildren(), true);
-		assertEquals(child1.hasChildren(), true);
-		assertEquals(child2.hasChildren(), true);
-		assertEquals(child3.hasChildren(), false);
+		assertTrue(rootFolder.hasChildren());
+		assertTrue(child1.hasChildren());
+		assertTrue(child2.hasChildren());
+		assertFalse(child3.hasChildren());
 	}
 	
 	@Test
 	void testGetAllChildren() {
 		List<FolderABS> siblings = rootFolder.getAllChildren();
-		assertEquals(siblings.contains(rootFolder), false);
-		assertEquals(siblings.contains(child3), true);
-		assertEquals(siblings.contains(child1), true);
-		assertEquals(siblings.contains(child2), true);
+		assertFalse(siblings.contains(rootFolder));
+		assertTrue(siblings.contains(child3));
+		assertTrue(siblings.contains(child1));
+		assertTrue(siblings.contains(child2));
 	}
 	
 	@Test
 	void testDelete() {
 		List<FolderABS> siblings = rootFolder.getAllChildren();
-		assertEquals(siblings.contains(child1), true);
-		assertEquals(siblings.contains(child2), true);
-		assertEquals(siblings.contains(child3), true);
+		assertTrue(siblings.contains(child1));
+		assertTrue(siblings.contains(child2));
+		assertTrue(siblings.contains(child3));
 
 		child3.delete();
 		assertEquals(child2.getChildren(), new ArrayList<FolderABS>());
 		child1.delete();
 		List<FolderABS> subFolders = rootFolder.getAllChildren();
-		assertEquals(subFolders.contains(child1), false);
-		assertEquals(subFolders.contains(child2), false);
-		assertEquals(subFolders.contains(child3), false);
+		assertFalse(subFolders.contains(child1));
+		assertFalse(subFolders.contains(child2));
+		assertFalse(subFolders.contains(child3));
 	}
 }

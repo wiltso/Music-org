@@ -20,8 +20,8 @@ public abstract class FolderABS implements FolderIF<Album>, HierarchyIF<FolderAB
 		assert subFoldersList != null;
 		this.parent = parent;
 		this.name = folderName;
-		this.albums = albumList;
-		this.subFolders = subFoldersList;
+		this.albums = new ArrayList<>(albumList);
+		this.subFolders = new ArrayList<>(subFoldersList);
 		
 		if (this.hasParent()) {
 			parent.addChild(this);
@@ -58,15 +58,21 @@ public abstract class FolderABS implements FolderIF<Album>, HierarchyIF<FolderAB
 	 * Index most exist albums list
 	 */
 	public void deleteAlbum(int index) {
-		assert 0 <= index && index > albums.size();
+		assert 0 <= index && index < albums.size();
 		albums.remove(index);
+	}
+	/*
+	 * Deletes album by the album instance
+	 */
+	public void deleteAlbum(Album song) {
+		albums.remove(song);
 	}
 	/*
 	 * Deletes a subfolder from this subFolder
 	 * Requires index to be inside of the array
 	 */
 	public void deleteSubfolder(int index) {
-		assert (int) 0 <= index && index > subFolders.size();
+		assert (int) 0 <= index && index < subFolders.size();
 		subFolders.remove(index);
 	}
 	/*
@@ -77,12 +83,16 @@ public abstract class FolderABS implements FolderIF<Album>, HierarchyIF<FolderAB
 	}
 	/*
 	 * Checks if this folder has a subfolder
+	 * 
+	 * @return Checks if there are any subfolder
 	 */
 	public boolean hasChildren() {
 		return !subFolders.isEmpty();
 	}
 	/*
 	 * Checks if folder has a parent
+	 * 
+	 * @return True of false if this folder has a parent
 	 */
 	public boolean hasParent() {
 		return parent != null;
@@ -90,12 +100,16 @@ public abstract class FolderABS implements FolderIF<Album>, HierarchyIF<FolderAB
 
 	/*
 	 * Gets this folders subfolders
+	 * 
+	 * @return List of this folder children
 	 */
 	public List<FolderABS> getChildren(){
 		return subFolders;
 	};
 	/*
 	 * Gets all subfolders that are under this folder in the tree structure
+	 * 
+	 * @return List of all folders belows this folder
 	 */
 	public List<FolderABS> getAllChildren(){
 		List<FolderABS> allChildrenFolders = new ArrayList<FolderABS>();
@@ -111,6 +125,8 @@ public abstract class FolderABS implements FolderIF<Album>, HierarchyIF<FolderAB
 	}
 	/*
 	 * Gets all folders that are on the same level as this folder is in the folder tree
+	 * 
+	 * @return List of all folder siblings
 	 */
 	public List<FolderABS> getSiblings(){
 		if (this.hasParent() == true) {
@@ -126,19 +142,25 @@ public abstract class FolderABS implements FolderIF<Album>, HierarchyIF<FolderAB
 	/*
 	 * Get album from this folder by the index
 	 * The index needs to be larger the zero and smaller the size of album
+	 * 
+	 * @return Album object from the index
 	 */
 	public Album getAlbum(int index) {
-		assert (int) 0 <= index && index > albums.size();
+		assert (int) 0 <= index && index < albums.size();
 		return albums.get(index);
 	}
 	/*
 	 * Gets this folders parent
+	 * 
+	 * @return type FolderABS that is this folders parent
 	 */
 	public FolderABS getParent() {
 		return parent;
 	}
 	/*
 	 * Gets the folder name
+	 * 
+	 * @return name of this folder
 	 */
 	public String getName() {
 		return name;

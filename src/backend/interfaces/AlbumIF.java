@@ -10,4 +10,5 @@ public interface AlbumIF<E> {
 	public void addSong(E song);
 	public SoundClip getSong(int index);
 	public void deleteSong(int index);
+	public void deleteSong(E song);
 }
