@@ -204,7 +204,7 @@ public class MusicOrganizerWindow extends JFrame {
 		for(Enumeration e = ((DefaultMutableTreeNode) model.getRoot()).breadthFirstEnumeration(); e.hasMoreElements();){
 			DefaultMutableTreeNode parent = (DefaultMutableTreeNode) e.nextElement();
 			
-			// TODO: Get the parent album of newAlbum
+			// Get the parent album of newAlbum
 			Folder parentAlbum; 
 			parentAlbum = newAlbum.getParent();
 			

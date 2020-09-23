@@ -11,7 +11,7 @@ public class MusicOrganizerController {
 	
 	public MusicOrganizerController() {
 		
-		// TODO: Create the root album for all sound clips
+		// Create the root album for all sound clips
 		root = new Folder("All Sound Clips", null);
 		
 		
@@ -31,7 +31,7 @@ public class MusicOrganizerController {
 	 */
 	public Set<SoundClip> loadSoundClips(String path) {
 		Set<SoundClip> clips = SoundClipLoader.loadSoundClips(path);
-		// TODO: Add the loaded sound clips to the root album
+
 		for(SoundClip sc: clips) {
 			root.addSong(sc);
 		}
@@ -49,8 +49,8 @@ public class MusicOrganizerController {
 	/**
 	 * Adds an album to the Music Organizer
 	 */
-	public void addNewAlbum(){ //TODO Update parameters if needed - e.g. you might want to give the currently selected album as parameter
-		// TODO: Add your code here
+	public void addNewAlbum(){ 
+
 		if(view.getSelectedAlbum() != null) {
 			Folder parent = view.getSelectedAlbum();
 			String name = view.promptForAlbumName();
@@ -65,8 +65,8 @@ public class MusicOrganizerController {
 	/**
 	 * Removes an album from the Music Organizer
 	 */
-	public void deleteAlbum(){ //TODO Update parameters if needed
-		// TODO: Add your code here
+	public void deleteAlbum(){ 
+
 		if(view.getSelectedAlbum() != null && view.getSelectedAlbum().hasParent()) {
 			Folder toBeDeleted = view.getSelectedAlbum();
 			toBeDeleted.getParent().deleteSubfolder(toBeDeleted);
@@ -77,8 +77,8 @@ public class MusicOrganizerController {
 	/**
 	 * Adds sound clips to an album
 	 */
-	public void addSoundClips(){ //TODO Update parameters if needed
-		// TODO: Add your code here
+	public void addSoundClips(){ 
+
 		List<SoundClip> selectedSoundClips = view.getSelectedSoundClips();
 		Folder folder = view.getSelectedAlbum();
 		for(SoundClip sc: selectedSoundClips) {
@@ -90,8 +90,8 @@ public class MusicOrganizerController {
 	/**
 	 * Removes sound clips from an album
 	 */
-	public void removeSoundClips(){ //TODO Update parameters if needed
-		// TODO: Add your code here
+	public void removeSoundClips(){
+
 		List<SoundClip> selectedSoundClips = view.getSelectedSoundClips();
 		Folder folder = view.getSelectedAlbum();
 		for(SoundClip sc: selectedSoundClips) {

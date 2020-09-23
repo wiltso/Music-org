@@ -1,0 +1,10 @@
+Programmering 4 Uppgift 1
+Ville Hirvisuo och William Lindholm
+
+Ändringar vi har gjort från Uppg1:
+1. Tagit bort Album och RootFolder klassen.
+2. Tagit bort abstratktionen from FolderABS klassen och döp om den till Folder.
+
+Sedan har vi bara importera källkoden för uppg2. 
+Uppdaterade källkoden vi fick för att fungera med vår Folder klass.
+Implementera koden för funktionerna som hade TODO komentarar i sig.
