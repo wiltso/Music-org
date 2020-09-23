@@ -10,7 +10,6 @@ public interface HierarchyIF<E> {
 	public List<E> getAllChildren();
 	public List<E> getSiblings();
 	public void addChild(E newChild);
-	public boolean changeParent(E newParent);
 	public boolean hasChildren();
 	public boolean hasParent();
 	public boolean delete();
