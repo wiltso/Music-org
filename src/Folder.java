@@ -1,26 +1,23 @@
-package backend.absClasses;
+
 
 import java.util.ArrayList;
 import java.util.List;
 
-import backend.SoundClip;
 import backend.interfaces.HierarchyIF;
 
-public abstract class FolderABS implements HierarchyIF<FolderABS> {
+public class Folder implements HierarchyIF<Folder> {
 
 	private String name;
-	protected FolderABS parent;
-	protected List<FolderABS> subFolders;
+	protected Folder parent;
+	protected List<Folder> subFolders;
 	protected List<SoundClip> songList;
 	
-	public FolderABS(String folderName, FolderABS parent, List<FolderABS> subFoldersList, List<SoundClip> songList) {
+	public Folder(String folderName, Folder parent) {
 		assert folderName != null;
-		assert subFoldersList != null;
-		assert songList != null;
 		this.parent = parent;
 		this.name = folderName;
-		this.subFolders = new ArrayList<>(subFoldersList);
-		this.songList = new ArrayList<>(songList);
+		this.subFolders = new ArrayList<Folder>();
+		this.songList = new ArrayList<SoundClip>();
 		
 		if(this.hasParent()) {
 			parent.addChild(this);
@@ -30,7 +27,7 @@ public abstract class FolderABS implements HierarchyIF<FolderABS> {
 	 * Adds a folder to be this folders subfolder
 	 * Needs to be a folder can't be null
 	 */
-	public void addChild(FolderABS child) {
+	public void addChild(Folder child) {
 		assert child != null;
 		subFolders.add(child);
 	}
@@ -53,7 +50,7 @@ public abstract class FolderABS implements HierarchyIF<FolderABS> {
 	/*
 	 * Deletes a subfolder from this folder with a folder object
 	 */
-	public void deleteSubfolder(FolderABS object) {
+	public void deleteSubfolder(Folder object) {
 		assert object != null;
 		subFolders.remove(object);
 	}
@@ -78,7 +75,7 @@ public abstract class FolderABS implements HierarchyIF<FolderABS> {
 	 * 
 	 * @return List of this folder's children
 	 */
-	public List<FolderABS> getChildren() {
+	public List<Folder> getChildren() {
 		return subFolders;
 	}
 	/*
@@ -86,14 +83,14 @@ public abstract class FolderABS implements HierarchyIF<FolderABS> {
 	 * 
 	 * @return List of all folders below this folder
 	 */
-	public List<FolderABS> getAllChildren() {
-		List<FolderABS> allChildrenFolders = new ArrayList<FolderABS>();
-		for(FolderABS childFolder: this.subFolders) {
+	public List<Folder> getAllChildren() {
+		List<Folder> allChildrenFolders = new ArrayList<Folder>();
+		for(Folder childFolder: this.subFolders) {
 			allChildrenFolders.add(childFolder);
 		}
 		
-		for(FolderABS subFolder: this.subFolders) {
-			for(FolderABS childFolder: subFolder.getAllChildren()) {
+		for(Folder subFolder: this.subFolders) {
+			for(Folder childFolder: subFolder.getAllChildren()) {
 				allChildrenFolders.add(childFolder);
 			}
 		}
@@ -105,9 +102,9 @@ public abstract class FolderABS implements HierarchyIF<FolderABS> {
 	 * 
 	 * @return List of all folder siblings
 	 */
-	public List<FolderABS> getSiblings() {
+	public List<Folder> getSiblings() {
 		if(this.hasParent() == true) {
-			List<FolderABS> children = this.parent.getChildren();
+			List<Folder> children = this.parent.getChildren();
 			children.remove(this);
 			return children;
 		} else {
@@ -119,7 +116,7 @@ public abstract class FolderABS implements HierarchyIF<FolderABS> {
 	 * 
 	 * @return type FolderABS that is this folders parent
 	 */
-	public FolderABS getParent() {
+	public Folder getParent() {
 		return parent;
 	}
 	/*
@@ -145,10 +142,14 @@ public abstract class FolderABS implements HierarchyIF<FolderABS> {
 	public void addSong(SoundClip song) {
 		assert song != null;
 		songList.add(song);
-		FolderABS parentFolder = this.getParent();
+		Folder parentFolder = this.getParent();
 		while(parentFolder != null) {
-			parentFolder.songList.add(song);
-			parentFolder = parentFolder.getParent();
+			if(!parentFolder.songList.contains(song)) {
+				parentFolder.songList.add(song);
+				parentFolder = parentFolder.getParent();
+			} else {
+				parentFolder = parentFolder.getParent();
+			}
 		}
 	}
 	/*
@@ -170,7 +171,7 @@ public abstract class FolderABS implements HierarchyIF<FolderABS> {
 		SoundClip temp = songList.get(index);
 		songList.remove(index);
 		if(this.hasChildren()) {
-			for(FolderABS child: subFolders) {
+			for(Folder child: subFolders) {
 				child.songList.remove(temp);
 			}
 		}
@@ -182,13 +183,14 @@ public abstract class FolderABS implements HierarchyIF<FolderABS> {
 		assert object != null;
 		songList.remove(object);
 		if(this.hasChildren()) {
-			for(FolderABS child: subFolders) {
+			for(Folder child: subFolders) {
 				child.songList.remove(object);
 			}
 		}
 	}
 	
-	public abstract boolean delete();
-	public abstract FolderABS getRoot();
+	public String toString() {
+		return name;
+	}
 
 }
