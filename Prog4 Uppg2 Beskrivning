@@ -1,4 +1,4 @@
-Programmering 4 Uppgift 1
+Programmering 4 Uppgift 2
 Ville Hirvisuo och William Lindholm
 
 Ändringar vi har gjort från Uppg1:
@@ -6,6 +6,6 @@ Ville Hirvisuo och William Lindholm
 2. Tagit bort abstratktionen from FolderABS klassen och döp om den till Folder.
 
 Sedan har vi bara importera källkoden för uppg2. 
-All källkod som vi importera är i front packagen utom SoundClip som är i backend
+All källkod som vi importera är i front packagen utom SoundClip som är i backend.
 Uppdaterade källkoden vi fick för att fungera med vår Folder klass.
 Implementera koden för funktionerna som hade TODO komentarar i sig.
