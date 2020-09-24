@@ -1,7 +1,12 @@
+package front;
+
 import java.util.List;
 import java.util.Set;
 
 import javax.swing.JOptionPane;
+
+import backend.Folder;
+import backend.SoundClip;
 
 public class MusicOrganizerController {
 

@@ -1,3 +1,5 @@
+package front;
+
 import javax.swing.SwingUtilities;
 
 public class MainApplication {

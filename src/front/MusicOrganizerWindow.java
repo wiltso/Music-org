@@ -1,3 +1,4 @@
+package front;
 
 import java.awt.Dimension;
 import java.awt.event.MouseEvent;
@@ -14,6 +15,9 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.DefaultTreeSelectionModel;
 import javax.swing.tree.TreePath;
+
+import backend.Folder;
+import backend.SoundClip;
 
 
 public class MusicOrganizerWindow extends JFrame {
