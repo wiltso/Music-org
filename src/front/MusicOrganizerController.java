@@ -61,7 +61,6 @@ public class MusicOrganizerController {
 			String name = view.promptForAlbumName();
 			if(name != null) {
 				Folder folder = new Folder(name, parent);
-				parent.addChild(folder);
 				view.onAlbumAdded(folder);
 			}
 		}
