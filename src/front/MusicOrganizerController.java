@@ -1,11 +1,13 @@
 package front;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Set;
 
 import javax.swing.JOptionPane;
 
 import backend.Folder;
+import backend.History;
 import backend.SoundClip;
 
 public class MusicOrganizerController {
@@ -115,5 +117,25 @@ public class MusicOrganizerController {
 		List<SoundClip> l = view.getSelectedSoundClips();
 		for(int i=0;i<l.size();i++)
 			queue.enqueue(l.get(i));
+	}
+	
+	public void undo() {
+		History history = History.getInstance();
+		try {
+			history.undo();
+		} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException
+				| InvocationTargetException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void redo() {
+		History history = History.getInstance();
+		try {
+			history.redo();
+		} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException
+				| InvocationTargetException e) {
+			e.printStackTrace();
+		}
 	}
 }

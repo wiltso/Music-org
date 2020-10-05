@@ -1,7 +1,9 @@
 package backend;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import backend.interfaces.HierarchyIF;
 
@@ -30,6 +32,7 @@ public class Folder implements HierarchyIF<Folder> {
 	public void addChild(Folder child) {
 		assert child != null;
 		subFolders.add(child);
+		createAction(child, "addChild", "deleteSubfolder");
 	}
 	/*
 	 * Changes the name of this folder
@@ -38,6 +41,8 @@ public class Folder implements HierarchyIF<Folder> {
 	public void changeName(String newName) {
 		assert newName != null;
 		name = newName;
+		// There is no way for the user to change the name
+		// If this is added remember to make a action for it
 	}
 	/*
 	 * Deletes a subfolder from this folder
@@ -45,7 +50,9 @@ public class Folder implements HierarchyIF<Folder> {
 	 */
 	public void deleteSubfolder(int index) {
 		assert (int) 0 <= index && index < subFolders.size();
+		Folder subfolder = subFolders.get(index);
 		subFolders.remove(index);
+		createAction(subfolder, "deleteSubfolder", "addChild");
 	}
 	/*
 	 * Deletes a subfolder from this folder with a folder object
@@ -53,6 +60,8 @@ public class Folder implements HierarchyIF<Folder> {
 	public void deleteSubfolder(Folder object) {
 		assert object != null;
 		subFolders.remove(object);
+		createAction(object, "deleteSubfolder", "addChild");
+
 	}
 	/*
 	 * Checks if this folder has a subfolder
@@ -143,7 +152,9 @@ public class Folder implements HierarchyIF<Folder> {
 		assert song != null;
 		songList.add(song);
 		Folder parentFolder = this.getParent();
+		Set<Folder> parents = new HashSet<Folder>();
 		while(parentFolder != null) {
+			parents.add(parentFolder);
 			if(!parentFolder.songList.contains(song)) {
 				parentFolder.songList.add(song);
 				parentFolder = parentFolder.getParent();
@@ -151,6 +162,7 @@ public class Folder implements HierarchyIF<Folder> {
 				parentFolder = parentFolder.getParent();
 			}
 		}
+		createAction(parents, song, "addSong", "deleteSong");
 	}
 	/*
 	 * Get SoundClip from this folder by the index
@@ -168,11 +180,13 @@ public class Folder implements HierarchyIF<Folder> {
 	 */
 	public void deleteSong(int index) {
 		assert 0 <= index && index < songList.size();
-		SoundClip temp = songList.get(index);
+		SoundClip song = songList.get(index);
+		Set<Folder> subfolders = new HashSet<Folder>(getAllChildren());
+		createAction(subfolders, song, "deleteSong", "addSong");
 		songList.remove(index);
 		if(this.hasChildren()) {
 			for(Folder child: subFolders) {
-				child.songList.remove(temp);
+				child.deleteSong(song);
 			}
 		}
 	}
@@ -181,12 +195,26 @@ public class Folder implements HierarchyIF<Folder> {
 	 */
 	public void deleteSong(SoundClip object) {
 		assert object != null;
+		Set<Folder> subfolders = new HashSet<Folder>(getAllChildren());
+		createAction(subfolders, object, "deleteSong", "addSong");
 		songList.remove(object);
 		if(this.hasChildren()) {
 			for(Folder child: subFolders) {
-				child.songList.remove(object);
+				child.deleteSong(object);
 			}
 		}
+	}
+	
+	private void createAction(Set<Folder> objects, Object parameter, String functionName, String undoFunctionName) {
+		Action newAction = new Action(this, objects, parameter, functionName, undoFunctionName);
+		History history = History.getInstance();
+		history.addHistory(newAction);
+	}
+	
+	private void createAction(Object parameter, String functionName, String undoFunctionName) {
+		Action newAction = new Action(this, new HashSet<Folder>(), parameter, functionName, undoFunctionName);
+		History history = History.getInstance();
+		history.addHistory(newAction);
 	}
 	
 	public String toString() {
