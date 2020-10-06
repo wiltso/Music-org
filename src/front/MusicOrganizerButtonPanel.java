@@ -134,25 +134,25 @@ public class MusicOrganizerButtonPanel extends JPanel {
 
 	private JButton createUndoButton() {
 		//ImageIcon playIcon = new ImageIcon("icons/play_32.png");
-		JButton playButton = new JButton("Undo");
-		playButton.setToolTipText("Undo last action");
-		playButton.addActionListener(new ActionListener() {
+		JButton undoButton = new JButton("Undo");
+		undoButton.setToolTipText("Undo last action");
+		undoButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				controller.undo();
 			}
 		});
-		return playButton;
+		return undoButton;
 	}
 	
 	private JButton createRedoButton() {
 		//ImageIcon playIcon = new ImageIcon("icons/play_32.png");
-		JButton playButton = new JButton("Redo");
-		playButton.setToolTipText("Redo your the action you just undid");
-		playButton.addActionListener(new ActionListener() {
+		JButton redoButton = new JButton("Redo");
+		redoButton.setToolTipText("Redo your the action you just undid");
+		redoButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				controller.undo();
+				controller.redo();
 			}
 		});
-		return playButton;
+		return redoButton;
 	}
 }

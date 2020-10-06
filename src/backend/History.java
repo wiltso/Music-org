@@ -18,7 +18,7 @@ public class History {
 
 	private History() {
 		historyLog = new ArrayList<Action>();
-		placeInHistory = 0;
+		placeInHistory = -1;
 	}
 	
 	public static History getInstance() {
@@ -31,19 +31,29 @@ public class History {
 		}
 		return instance;
 	}
-	
+
 	public void addHistory(Action action) {
 		historyLog.add(action);
-		placeInHistory =+ 1;
+		placeInHistory = placeInHistory + 1;
+	}
+	
+	public boolean canUndo() {
+		return (boolean) (0 < placeInHistory && placeInHistory < historyLog.size());
+	}
+	
+	public boolean canRedo() {
+		return (boolean) (placeInHistory < historyLog.size() - 1);
 	}
 	
 	public void undo() throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		assert placeInHistory < historyLog.size();
 		assert placeInHistory > 0;
-		
 		Action action = historyLog.get(placeInHistory);
+		System.out.println("Action being undon place: " + placeInHistory);
+		System.out.println("Action size of actions: " + historyLog.size());
+		System.out.println("Action being undon: " + action);
 		action.undo();
-		placeInHistory =- 1;
+		placeInHistory = placeInHistory - 1;
 	}
 	
 	public void redo() throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
@@ -51,7 +61,7 @@ public class History {
 
 		Action action = historyLog.get(placeInHistory);
 		action.execute();
-		placeInHistory =+ 1;
+		placeInHistory = placeInHistory + 1;
 	}
 	
 }

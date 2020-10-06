@@ -17,13 +17,12 @@ public class MusicOrganizerController {
 	private Folder root;
 	
 	public MusicOrganizerController() {
-		
 		// Create the root album for all sound clips
-		root = new Folder("All Sound Clips", null);
-		
+		root = new Folder("All Sound Clips", null, view);
 		
 		// Create the View in Model-View-Controller
 		view = new MusicOrganizerWindow(this);
+		root.setView(view);
 		
 		// Create the blocking queue
 		queue = new SoundClipBlockingQueue();
@@ -56,15 +55,14 @@ public class MusicOrganizerController {
 	/**
 	 * Adds an album to the Music Organizer
 	 */
-	public void addNewAlbum(){ 
+	public void addNewAlbum(){
 
 		if(view.getSelectedAlbum() != null) {
 			Folder parent = view.getSelectedAlbum();
 			String name = view.promptForAlbumName();
 			if(name != null) {
-				Folder folder = new Folder(name, parent);
+				Folder folder = new Folder(name, parent, view);
 				parent.addChild(folder);
-				view.onAlbumAdded(folder);
 			}
 		}
 	}
@@ -77,7 +75,6 @@ public class MusicOrganizerController {
 		if(view.getSelectedAlbum() != null && view.getSelectedAlbum().hasParent()) {
 			Folder toBeDeleted = view.getSelectedAlbum();
 			toBeDeleted.getParent().deleteSubfolder(toBeDeleted);
-			view.onAlbumRemoved(toBeDeleted);
 		}
 	}
 	
@@ -123,6 +120,7 @@ public class MusicOrganizerController {
 		History history = History.getInstance();
 		try {
 			history.undo();
+			view.onClipsUpdated();
 		} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException
 				| InvocationTargetException e) {
 			e.printStackTrace();
@@ -133,6 +131,7 @@ public class MusicOrganizerController {
 		History history = History.getInstance();
 		try {
 			history.redo();
+			view.onClipsUpdated();
 		} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException
 				| InvocationTargetException e) {
 			e.printStackTrace();

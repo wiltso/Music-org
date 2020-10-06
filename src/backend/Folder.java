@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import backend.interfaces.HierarchyIF;
+import front.MusicOrganizerWindow;
 
 public class Folder implements HierarchyIF<Folder> {
 
@@ -13,18 +14,21 @@ public class Folder implements HierarchyIF<Folder> {
 	protected Folder parent;
 	protected List<Folder> subFolders;
 	protected List<SoundClip> songList;
+	private MusicOrganizerWindow view;
 	
-	public Folder(String folderName, Folder parent) {
+	public Folder(String folderName, Folder parent, MusicOrganizerWindow view) {
 		assert folderName != null;
 		this.parent = parent;
 		this.name = folderName;
+		this.view = view;
 		this.subFolders = new ArrayList<Folder>();
 		this.songList = new ArrayList<SoundClip>();
-		
-		if(this.hasParent()) {
-			parent.addChild(this);
-		}
 	}
+	
+	public void setView(MusicOrganizerWindow view) {
+		this.view = view;
+	}
+	
 	/*
 	 * Adds a folder to be this folders subfolder
 	 * Needs to be a folder can't be null
@@ -32,8 +36,10 @@ public class Folder implements HierarchyIF<Folder> {
 	public void addChild(Folder child) {
 		assert child != null;
 		subFolders.add(child);
+		view.onAlbumAdded(child);
 		createAction(child, "addChild", "deleteSubfolder");
 	}
+
 	/*
 	 * Changes the name of this folder
 	 * The name can't be null
@@ -42,7 +48,7 @@ public class Folder implements HierarchyIF<Folder> {
 		assert newName != null;
 		name = newName;
 		// There is no way for the user to change the name
-		// If this is added remember to make a action for it
+		// If this is added remember to make a action for it	
 	}
 	/*
 	 * Deletes a subfolder from this folder
@@ -52,6 +58,7 @@ public class Folder implements HierarchyIF<Folder> {
 		assert (int) 0 <= index && index < subFolders.size();
 		Folder subfolder = subFolders.get(index);
 		subFolders.remove(index);
+		view.onAlbumRemoved(subfolder);
 		createAction(subfolder, "deleteSubfolder", "addChild");
 	}
 	/*
@@ -60,9 +67,10 @@ public class Folder implements HierarchyIF<Folder> {
 	public void deleteSubfolder(Folder object) {
 		assert object != null;
 		subFolders.remove(object);
+		view.onAlbumRemoved(object);
 		createAction(object, "deleteSubfolder", "addChild");
-
 	}
+
 	/*
 	 * Checks if this folder has a subfolder
 	 * 
@@ -220,5 +228,4 @@ public class Folder implements HierarchyIF<Folder> {
 	public String toString() {
 		return name;
 	}
-
 }
