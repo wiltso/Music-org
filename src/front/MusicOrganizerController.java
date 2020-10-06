@@ -116,6 +116,9 @@ public class MusicOrganizerController {
 			queue.enqueue(l.get(i));
 	}
 	
+	/*
+	 * Performs the undo action when users click undo button
+	 */
 	public void undo() {
 		History history = History.getInstance();
 		try {
@@ -127,6 +130,9 @@ public class MusicOrganizerController {
 		}
 	}
 	
+	/*
+	 * Performs the redo action when users click redo button
+	 */
 	public void redo() {
 		History history = History.getInstance();
 		try {

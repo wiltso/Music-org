@@ -261,6 +261,9 @@ public class MusicOrganizerWindow extends JFrame {
 		treeUpdate();
 	}
 	
+	/*
+	 * Updates the undo and redo button to be enable or disabled after a action
+	 */
 	private void treeUpdate() {
 		History history = History.getInstance();
 		buttonPanel.setEnabledRedoButton(history.canRedo());

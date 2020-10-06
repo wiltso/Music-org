@@ -16,8 +16,8 @@ public class Folder implements HierarchyIF<Folder> {
 	protected List<Folder> subFolders;
 	protected List<SoundClip> songList;
 	private MusicOrganizerWindow view;
-	private boolean actionCreate;
-	
+	private final ActionFactory actionFactory;
+
 	public Folder(String folderName, Folder parent, MusicOrganizerWindow view) {
 		assert folderName != null;
 		this.parent = parent;
@@ -25,7 +25,7 @@ public class Folder implements HierarchyIF<Folder> {
 		this.view = view;
 		this.subFolders = new ArrayList<Folder>();
 		this.songList = new ArrayList<SoundClip>();
-		actionCreate = true;
+		actionFactory = new ActionFactory();
 	}
 	
 	public void setView(MusicOrganizerWindow view) {
@@ -39,7 +39,6 @@ public class Folder implements HierarchyIF<Folder> {
 	public void addChild(Folder child) {
 		assert child != null;
 		subFolders.add(child);
-		ActionFactory actionFactory = ActionFactory.getInstance();
 		actionFactory.createAction(this, child, "addChild", "deleteSubfolder");
 		view.onAlbumAdded(child);
 
@@ -63,7 +62,6 @@ public class Folder implements HierarchyIF<Folder> {
 		assert (int) 0 <= index && index < subFolders.size();
 		Folder subfolder = subFolders.get(index);
 		subFolders.remove(index);
-		ActionFactory actionFactory = ActionFactory.getInstance();
 		actionFactory.createAction(this, subfolder, "deleteSubfolder", "addChild");
 		view.onAlbumRemoved(subfolder);
 	}
@@ -73,7 +71,6 @@ public class Folder implements HierarchyIF<Folder> {
 	public void deleteSubfolder(Folder object) {
 		assert object != null;
 		subFolders.remove(object);
-		ActionFactory actionFactory = ActionFactory.getInstance();
 		actionFactory.createAction(this, object, "deleteSubfolder", "addChild");
 		view.onAlbumRemoved(object);
 	}
@@ -169,15 +166,14 @@ public class Folder implements HierarchyIF<Folder> {
 		Folder parentFolder = this.getParent();
 		Set<Folder> parents = new HashSet<Folder>();
 		while(parentFolder != null) {
-			parents.add(parentFolder);
 			if(!parentFolder.songList.contains(song)) {
+				parents.add(parentFolder);
 				parentFolder.songList.add(song);
 				parentFolder = parentFolder.getParent();
 			} else {
 				parentFolder = parentFolder.getParent();
 			}
 		}
-		ActionFactory actionFactory = ActionFactory.getInstance();
 		actionFactory.createAction(this, parents, song, "addSong", "deleteSong");
 	}
 	/*
@@ -198,7 +194,6 @@ public class Folder implements HierarchyIF<Folder> {
 		assert 0 <= index && index < songList.size();
 		SoundClip song = songList.get(index);
 		Set<Folder> subfolders = new HashSet<Folder>(getAllChildren());
-		ActionFactory actionFactory = ActionFactory.getInstance();
 		actionFactory.createAction(this, subfolders, song, "deleteSong", "addSong");
 		songList.remove(index);
 		if(this.hasChildren()) {
@@ -213,7 +208,6 @@ public class Folder implements HierarchyIF<Folder> {
 	public void deleteSong(SoundClip object) {
 		assert object != null;
 		Set<Folder> subfolders = new HashSet<Folder>(getAllChildren());
-		ActionFactory actionFactory = ActionFactory.getInstance();
 		actionFactory.createAction(this, subfolders, object, "deleteSong", "addSong");
 		songList.remove(object);
 		if(this.hasChildren()) {

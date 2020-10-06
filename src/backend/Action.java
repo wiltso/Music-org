@@ -21,42 +21,35 @@ public class Action {
 		this.parameter = parameter;
 		functionName = function;
 		undoFunctionName = undoFunction;
-		System.out.println("New action");
-		System.out.println("Folder: " + folderObject);
-		System.out.println("Folder objects: " + folderObjects);
-		System.out.println("Parameter: " + parameter);
-		System.out.println("Function: " + function);
-		System.out.println("Undo Function: " + undoFunction);
-		System.out.println("This: " + this);
-		System.out.println("New action end\n");
-	}
-
-	public Folder getFolder(){
-		return object;
 	}
 	
+	/*
+	 * Gets the iterator for the objects that the action or the undo action need to be done on
+	 */
 	public Iterator<Folder> getObjects() {
 		return objects.iterator(); 
 	}
-	
+	/*
+	 * Gets a iterator for all the folder in the action
+	 * This means it concatenates the objects and object and creates a iterator on the combined set
+	 */
 	public Iterator<Folder> getAllObjects() {
-		Set<Folder> objectsCopy = new HashSet<Folder>();
+		Set<Folder> objectsCopy = new HashSet<Folder>(objects);
 		objectsCopy.add(object);
 		return objectsCopy.iterator(); 
 	}
 	
-	public String getFunction() {
-		return functionName;
-	}
-	public String getUndoFunction() {
-		return undoFunctionName;
-	}
-	
+	/*
+	 * Toggles if the action factory can create actions and add them to the history
+	 */
 	private void toggleActionCreator(boolean state) {
-		ActionFactory actionFactory = ActionFactory.getInstance();
-		actionFactory.setCanCreateAction(state);
+		Settings settings = Settings.getInstance();
+		settings.canCreateActions = state;
 	}
 	
+	/*
+	 * Dose the undo function on all the objects that it need to do it on
+	 */
 	public void undo() throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		toggleActionCreator(false);
 		Iterator<Folder> itr = getAllObjects();
@@ -73,6 +66,9 @@ public class Action {
 	    toggleActionCreator(true);
 	}
 	
+	/*
+	 * Executes the action only on the object because the folder object dose the reset when a action is executed
+	 */
 	public void execute() throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		toggleActionCreator(false);
 		Method setNameMethod = object.getClass().getMethod(functionName, parameter.getClass());
@@ -82,13 +78,5 @@ public class Action {
         	setNameMethod.invoke(object);
         }
         toggleActionCreator(true);
-	}
-
-	public Object getParameterType() {
-		return parameter.getClass();
-	}
-	
-	public Object getParameter() {
-		return parameter;
 	}
 }
