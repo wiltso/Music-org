@@ -33,6 +33,9 @@ public class History {
 	}
 
 	public void addHistory(Action action) {
+		while (placeInHistory + 1 != historyLog.size()) {
+			historyLog.remove(historyLog.size() - 1);
+		}
 		historyLog.add(action);
 		placeInHistory = placeInHistory + 1;
 	}
@@ -57,11 +60,11 @@ public class History {
 	}
 	
 	public void redo() throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-		assert placeInHistory < historyLog.size() - 1;
+		assert placeInHistory < historyLog.size() - 2;
+		placeInHistory = placeInHistory + 1;
 
 		Action action = historyLog.get(placeInHistory);
 		action.execute();
-		placeInHistory = placeInHistory + 1;
 	}
 	
 }

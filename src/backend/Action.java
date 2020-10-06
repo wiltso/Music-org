@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import backend.Factory.ActionFactory;
+
 public class Action {
 	private Folder object;
 	private Set<Folder> objects;
@@ -50,27 +52,36 @@ public class Action {
 		return undoFunctionName;
 	}
 	
+	private void toggleActionCreator(boolean state) {
+		ActionFactory actionFactory = ActionFactory.getInstance();
+		actionFactory.setCanCreateAction(state);
+	}
+	
 	public void undo() throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		toggleActionCreator(false);
 		Iterator<Folder> itr = getAllObjects();
 		Folder objectToRun;
 	    while(itr.hasNext()) {
 	    	objectToRun = itr.next();
-	    	Method setNameMethod = objectToRun.getClass().getMethod(getUndoFunction(), parameter.getClass());
+	    	Method setNameMethod = objectToRun.getClass().getMethod(undoFunctionName, parameter.getClass());
 	        if (parameter != null) {
 	        	setNameMethod.invoke(objectToRun, parameter);
 	        } else {
 	        	setNameMethod.invoke(objectToRun);
 	        }
 	    }
+	    toggleActionCreator(true);
 	}
 	
 	public void execute() throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-		Method setNameMethod = object.getClass().getMethod(getUndoFunction(), parameter.getClass());
+		toggleActionCreator(false);
+		Method setNameMethod = object.getClass().getMethod(functionName, parameter.getClass());
         if (parameter != null) {
         	setNameMethod.invoke(object, parameter);
         } else {
         	setNameMethod.invoke(object);
         }
+        toggleActionCreator(true);
 	}
 
 	public Object getParameterType() {

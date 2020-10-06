@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import backend.Factory.ActionFactory;
 import backend.interfaces.HierarchyIF;
 import front.MusicOrganizerWindow;
 
@@ -15,6 +16,7 @@ public class Folder implements HierarchyIF<Folder> {
 	protected List<Folder> subFolders;
 	protected List<SoundClip> songList;
 	private MusicOrganizerWindow view;
+	private boolean actionCreate;
 	
 	public Folder(String folderName, Folder parent, MusicOrganizerWindow view) {
 		assert folderName != null;
@@ -23,6 +25,7 @@ public class Folder implements HierarchyIF<Folder> {
 		this.view = view;
 		this.subFolders = new ArrayList<Folder>();
 		this.songList = new ArrayList<SoundClip>();
+		actionCreate = true;
 	}
 	
 	public void setView(MusicOrganizerWindow view) {
@@ -37,7 +40,8 @@ public class Folder implements HierarchyIF<Folder> {
 		assert child != null;
 		subFolders.add(child);
 		view.onAlbumAdded(child);
-		createAction(child, "addChild", "deleteSubfolder");
+		ActionFactory actionFactory = ActionFactory.getInstance();
+		actionFactory.createAction(this, child, "addChild", "deleteSubfolder");
 	}
 
 	/*
@@ -59,7 +63,8 @@ public class Folder implements HierarchyIF<Folder> {
 		Folder subfolder = subFolders.get(index);
 		subFolders.remove(index);
 		view.onAlbumRemoved(subfolder);
-		createAction(subfolder, "deleteSubfolder", "addChild");
+		ActionFactory actionFactory = ActionFactory.getInstance();
+		actionFactory.createAction(this, subfolder, "deleteSubfolder", "addChild");
 	}
 	/*
 	 * Deletes a subfolder from this folder with a folder object
@@ -68,7 +73,8 @@ public class Folder implements HierarchyIF<Folder> {
 		assert object != null;
 		subFolders.remove(object);
 		view.onAlbumRemoved(object);
-		createAction(object, "deleteSubfolder", "addChild");
+		ActionFactory actionFactory = ActionFactory.getInstance();
+		actionFactory.createAction(this, object, "deleteSubfolder", "addChild");
 	}
 
 	/*
@@ -101,7 +107,7 @@ public class Folder implements HierarchyIF<Folder> {
 	 * @return List of all folders below this folder
 	 */
 	public List<Folder> getAllChildren() {
-		List<Folder> allChildrenFolders = new ArrayList<Folder>();
+ 		List<Folder> allChildrenFolders = new ArrayList<Folder>();
 		for(Folder childFolder: this.subFolders) {
 			allChildrenFolders.add(childFolder);
 		}
@@ -170,7 +176,8 @@ public class Folder implements HierarchyIF<Folder> {
 				parentFolder = parentFolder.getParent();
 			}
 		}
-		createAction(parents, song, "addSong", "deleteSong");
+		ActionFactory actionFactory = ActionFactory.getInstance();
+		actionFactory.createAction(this, parents, song, "addSong", "deleteSong");
 	}
 	/*
 	 * Get SoundClip from this folder by the index
@@ -190,7 +197,8 @@ public class Folder implements HierarchyIF<Folder> {
 		assert 0 <= index && index < songList.size();
 		SoundClip song = songList.get(index);
 		Set<Folder> subfolders = new HashSet<Folder>(getAllChildren());
-		createAction(subfolders, song, "deleteSong", "addSong");
+		ActionFactory actionFactory = ActionFactory.getInstance();
+		actionFactory.createAction(this, subfolders, song, "deleteSong", "addSong");
 		songList.remove(index);
 		if(this.hasChildren()) {
 			for(Folder child: subFolders) {
@@ -204,25 +212,14 @@ public class Folder implements HierarchyIF<Folder> {
 	public void deleteSong(SoundClip object) {
 		assert object != null;
 		Set<Folder> subfolders = new HashSet<Folder>(getAllChildren());
-		createAction(subfolders, object, "deleteSong", "addSong");
+		ActionFactory actionFactory = ActionFactory.getInstance();
+		actionFactory.createAction(this, subfolders, object, "deleteSong", "addSong");
 		songList.remove(object);
 		if(this.hasChildren()) {
 			for(Folder child: subFolders) {
 				child.deleteSong(object);
 			}
 		}
-	}
-	
-	private void createAction(Set<Folder> objects, Object parameter, String functionName, String undoFunctionName) {
-		Action newAction = new Action(this, objects, parameter, functionName, undoFunctionName);
-		History history = History.getInstance();
-		history.addHistory(newAction);
-	}
-	
-	private void createAction(Object parameter, String functionName, String undoFunctionName) {
-		Action newAction = new Action(this, new HashSet<Folder>(), parameter, functionName, undoFunctionName);
-		History history = History.getInstance();
-		history.addHistory(newAction);
 	}
 	
 	public String toString() {
