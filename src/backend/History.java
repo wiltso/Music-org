@@ -41,10 +41,13 @@ public class History {
 	}
 	
 	public boolean canUndo() {
-		return (boolean) (0 < placeInHistory && placeInHistory < historyLog.size());
+		return (boolean) (0 <= placeInHistory && placeInHistory < historyLog.size());
 	}
 	
 	public boolean canRedo() {
+		System.out.println("History Log: " + historyLog);
+		System.out.println("History Logsize: " + historyLog.size());
+		System.out.println("History log place: " + placeInHistory);
 		return (boolean) (placeInHistory < historyLog.size() - 1);
 	}
 	

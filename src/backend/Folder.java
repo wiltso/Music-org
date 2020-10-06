@@ -39,9 +39,10 @@ public class Folder implements HierarchyIF<Folder> {
 	public void addChild(Folder child) {
 		assert child != null;
 		subFolders.add(child);
-		view.onAlbumAdded(child);
 		ActionFactory actionFactory = ActionFactory.getInstance();
 		actionFactory.createAction(this, child, "addChild", "deleteSubfolder");
+		view.onAlbumAdded(child);
+
 	}
 
 	/*
@@ -62,9 +63,9 @@ public class Folder implements HierarchyIF<Folder> {
 		assert (int) 0 <= index && index < subFolders.size();
 		Folder subfolder = subFolders.get(index);
 		subFolders.remove(index);
-		view.onAlbumRemoved(subfolder);
 		ActionFactory actionFactory = ActionFactory.getInstance();
 		actionFactory.createAction(this, subfolder, "deleteSubfolder", "addChild");
+		view.onAlbumRemoved(subfolder);
 	}
 	/*
 	 * Deletes a subfolder from this folder with a folder object
@@ -72,9 +73,9 @@ public class Folder implements HierarchyIF<Folder> {
 	public void deleteSubfolder(Folder object) {
 		assert object != null;
 		subFolders.remove(object);
-		view.onAlbumRemoved(object);
 		ActionFactory actionFactory = ActionFactory.getInstance();
 		actionFactory.createAction(this, object, "deleteSubfolder", "addChild");
+		view.onAlbumRemoved(object);
 	}
 
 	/*

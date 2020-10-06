@@ -153,6 +153,15 @@ public class MusicOrganizerButtonPanel extends JPanel {
 				controller.redo();
 			}
 		});
+		redoButton.setEnabled(false);
 		return redoButton;
+	}
+	
+	public void setEnabledUndoButton(boolean state) {
+		undoButton.setEnabled(state);
+	}
+	
+	public void setEnabledRedoButton(boolean state) {
+		redoButton.setEnabled(state);
 	}
 }
