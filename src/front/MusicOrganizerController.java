@@ -1,11 +1,13 @@
 package front;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Set;
 
 import javax.swing.JOptionPane;
 
 import backend.Folder;
+import backend.History;
 import backend.SoundClip;
 
 public class MusicOrganizerController {
@@ -15,10 +17,8 @@ public class MusicOrganizerController {
 	private Folder root;
 	
 	public MusicOrganizerController() {
-		
 		// Create the root album for all sound clips
-		root = new Folder("All Sound Clips", null);
-		
+		root = new Folder("All Sound Clips", null, this);
 		
 		// Create the View in Model-View-Controller
 		view = new MusicOrganizerWindow(this);
@@ -54,14 +54,14 @@ public class MusicOrganizerController {
 	/**
 	 * Adds an album to the Music Organizer
 	 */
-	public void addNewAlbum(){ 
+	public void addNewAlbum(){
 
 		if(view.getSelectedAlbum() != null) {
 			Folder parent = view.getSelectedAlbum();
 			String name = view.promptForAlbumName();
 			if(name != null) {
-				Folder folder = new Folder(name, parent);
-				view.onAlbumAdded(folder);
+				Folder folder = new Folder(name, parent, this);
+				parent.addChild(folder);
 			}
 		}
 	}
@@ -74,7 +74,6 @@ public class MusicOrganizerController {
 		if(view.getSelectedAlbum() != null && view.getSelectedAlbum().hasParent()) {
 			Folder toBeDeleted = view.getSelectedAlbum();
 			toBeDeleted.getParent().deleteSubfolder(toBeDeleted);
-			view.onAlbumRemoved(toBeDeleted);
 		}
 	}
 	
@@ -114,5 +113,43 @@ public class MusicOrganizerController {
 		List<SoundClip> l = view.getSelectedSoundClips();
 		for(int i=0;i<l.size();i++)
 			queue.enqueue(l.get(i));
+	}
+	
+	/*
+	 * Performs the undo action when users click undo button
+	 */
+	public void undo() {
+		History history = History.getInstance();
+		try {
+			history.undo();
+			view.onClipsUpdated();
+		} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException
+				| InvocationTargetException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/*
+	 * Performs the redo action when users click redo button
+	 */
+	public void redo() {
+		History history = History.getInstance();
+		try {
+			history.redo();
+			view.onClipsUpdated();
+		} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException
+				| InvocationTargetException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/*
+	 * Delegate a method to the view
+	 */
+	public void onAlbumAdded(Folder instance) {
+		view.onAlbumAdded(instance);
+	}
+	public void onAlbumRemoved(Folder instance) {
+		view.onAlbumRemoved(instance);
 	}
 }

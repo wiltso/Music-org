@@ -17,6 +17,7 @@ import javax.swing.tree.DefaultTreeSelectionModel;
 import javax.swing.tree.TreePath;
 
 import backend.Folder;
+import backend.History;
 import backend.SoundClip;
 
 
@@ -224,6 +225,7 @@ public class MusicOrganizerWindow extends JFrame {
 				
 			}
 		}
+		treeUpdate();
 	}
 	
 	/**
@@ -243,6 +245,7 @@ public class MusicOrganizerWindow extends JFrame {
 				}
 			}
 		}
+		treeUpdate();
 	}
 	
 	/**
@@ -250,7 +253,20 @@ public class MusicOrganizerWindow extends JFrame {
 	 * 
 	 */
 	public void onClipsUpdated(){
-		Folder a = (Folder) getSelectedTreeNode().getUserObject();
-		clipTable.display(a);
+		DefaultMutableTreeNode node = getSelectedTreeNode();
+		if (node != null) {
+			Folder a = (Folder) node.getUserObject();
+			clipTable.display(a);
+		}
+		treeUpdate();
+	}
+	
+	/*
+	 * Updates the undo and redo button to be enable or disabled after a action
+	 */
+	private void treeUpdate() {
+		History history = History.getInstance();
+		buttonPanel.setEnabledRedoButton(history.canRedo());
+		buttonPanel.setEnabledUndoButton(history.canUndo());
 	}
 }

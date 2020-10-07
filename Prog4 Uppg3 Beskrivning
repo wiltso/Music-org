@@ -1,0 +1,19 @@
+Programmering 4 Uppgift 3
+Ville Hirvisuo och William Lindholm
+
+Vi har inte ändra på gammal kod annat än att vi delegera view updaten efter
+en folder har blivit addad eller deleted till själva folder som sedan kallar på controller som sedan kallar på viewn att en uppdatering har hänt och i foldern kallas då den här uppdateringen istället för i controllern som det var tidigare.
+Samt ändrat så att onClipsUpdated methoden i viewn inte slänger en error om ingen folder är selected.
+
+Vad vi har gjort för att uppgiften skall fungera att vi skapar Action object när du endera addar eller deletar end folder eller song i ActionFactoryn.
+Varför vi andvänder en catory för detta är för det finns endel parametrar som man kan välja mellan att ge till actionfactoryn för att skapa nya Actions
+Varför vi valde att använda en factory för detta var så att alla action object skapas på ett ställe och då var det enkelt igenom Settings objectet (Singelton).
+Att bestämma om Actionen skall bli tillägd i hitorian eller inte.
+Varför vi inte alltid vill tillägga action objectena i historian är för att dem blir alltid skapade även om du gör en undo action skapas men detta objectet vill vi inte ha i historian.
+Sedan har vi vår Historia object (Singelton) som då håller reda på vilka alla actions man kan göra undo/redo på.
+
+Sedan har vi också lagt till ett par functioner i gammla koden för att:
+1. Skapa undo och redo knappen
+2. Så att controllern kan hantera dessa actions.
+
+Efter som det inte finns något krav på att om man skall kunna undo att defult songerna blir addad så gjorde vi så att man kan men man skulle enkelt kunna ändra detta med 1 rad ny kod och en ändring.
