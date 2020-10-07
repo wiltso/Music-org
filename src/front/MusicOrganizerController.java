@@ -18,11 +18,10 @@ public class MusicOrganizerController {
 	
 	public MusicOrganizerController() {
 		// Create the root album for all sound clips
-		root = new Folder("All Sound Clips", null, view);
+		root = new Folder("All Sound Clips", null, this);
 		
 		// Create the View in Model-View-Controller
 		view = new MusicOrganizerWindow(this);
-		root.setView(view);
 		
 		// Create the blocking queue
 		queue = new SoundClipBlockingQueue();
@@ -61,7 +60,7 @@ public class MusicOrganizerController {
 			Folder parent = view.getSelectedAlbum();
 			String name = view.promptForAlbumName();
 			if(name != null) {
-				Folder folder = new Folder(name, parent, view);
+				Folder folder = new Folder(name, parent, this);
 				parent.addChild(folder);
 			}
 		}
@@ -142,5 +141,15 @@ public class MusicOrganizerController {
 				| InvocationTargetException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	/*
+	 * Delegate a method to the view
+	 */
+	public void onAlbumAdded(Folder instance) {
+		view.onAlbumAdded(instance);
+	}
+	public void onAlbumRemoved(Folder instance) {
+		view.onAlbumRemoved(instance);
 	}
 }

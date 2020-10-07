@@ -7,6 +7,7 @@ import java.util.Set;
 
 import backend.Factory.ActionFactory;
 import backend.interfaces.HierarchyIF;
+import front.MusicOrganizerController;
 import front.MusicOrganizerWindow;
 
 public class Folder implements HierarchyIF<Folder> {
@@ -15,21 +16,17 @@ public class Folder implements HierarchyIF<Folder> {
 	protected Folder parent;
 	protected List<Folder> subFolders;
 	protected List<SoundClip> songList;
-	private MusicOrganizerWindow view;
+	private MusicOrganizerController controller;
 	private final ActionFactory actionFactory;
 
-	public Folder(String folderName, Folder parent, MusicOrganizerWindow view) {
+	public Folder(String folderName, Folder parent, MusicOrganizerController controller) {
 		assert folderName != null;
 		this.parent = parent;
 		this.name = folderName;
-		this.view = view;
+		this.controller = controller;
 		this.subFolders = new ArrayList<Folder>();
 		this.songList = new ArrayList<SoundClip>();
 		actionFactory = new ActionFactory();
-	}
-	
-	public void setView(MusicOrganizerWindow view) {
-		this.view = view;
 	}
 	
 	/*
@@ -40,7 +37,7 @@ public class Folder implements HierarchyIF<Folder> {
 		assert child != null;
 		subFolders.add(child);
 		actionFactory.createAction(this, child, "addChild", "deleteSubfolder");
-		view.onAlbumAdded(child);
+		controller.onAlbumAdded(child);
 
 	}
 
@@ -63,7 +60,7 @@ public class Folder implements HierarchyIF<Folder> {
 		Folder subfolder = subFolders.get(index);
 		subFolders.remove(index);
 		actionFactory.createAction(this, subfolder, "deleteSubfolder", "addChild");
-		view.onAlbumRemoved(subfolder);
+		controller.onAlbumRemoved(subfolder);
 	}
 	/*
 	 * Deletes a subfolder from this folder with a folder object
@@ -72,7 +69,7 @@ public class Folder implements HierarchyIF<Folder> {
 		assert object != null;
 		subFolders.remove(object);
 		actionFactory.createAction(this, object, "deleteSubfolder", "addChild");
-		view.onAlbumRemoved(object);
+		controller.onAlbumRemoved(object);
 	}
 
 	/*
