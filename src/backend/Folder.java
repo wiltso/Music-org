@@ -13,9 +13,9 @@ import front.MusicOrganizerWindow;
 public class Folder implements HierarchyIF<Folder> {
 
 	private String name;
-	protected Folder parent;
-	protected List<Folder> subFolders;
-	protected List<SoundClip> songList;
+	private Folder parent;
+	private List<Folder> subFolders;
+	private List<SoundClip> songList;
 	private MusicOrganizerController controller;
 	private final ActionFactory actionFactory;
 
