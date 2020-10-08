@@ -206,7 +206,7 @@ public class MusicOrganizerWindow extends JFrame {
 		DefaultTreeModel model = (DefaultTreeModel) albumTree.getModel();
 		
 		//We search for the parent of the newly added Album so we can create the new node in the correct place
-		for(Enumeration e = ((DefaultMutableTreeNode) model.getRoot()).breadthFirstEnumeration(); e.hasMoreElements();){
+		for(Enumeration<?> e = ((DefaultMutableTreeNode) model.getRoot()).breadthFirstEnumeration(); e.hasMoreElements();){
 			DefaultMutableTreeNode parent = (DefaultMutableTreeNode) e.nextElement();
 			
 			// Get the parent album of newAlbum
@@ -237,7 +237,7 @@ public class MusicOrganizerWindow extends JFrame {
 		DefaultTreeModel model = (DefaultTreeModel) albumTree.getModel();
 		
 		//We search for the parent node so we update the tree as intended
-		for(Enumeration e = ((DefaultMutableTreeNode) model.getRoot()).breadthFirstEnumeration(); e.hasMoreElements();){
+		for(Enumeration<?> e = ((DefaultMutableTreeNode) model.getRoot()).breadthFirstEnumeration(); e.hasMoreElements();){
 			DefaultMutableTreeNode current = (DefaultMutableTreeNode) e.nextElement();
 			if(album.equals(current.getUserObject())){
 				if(current != null){
@@ -265,7 +265,7 @@ public class MusicOrganizerWindow extends JFrame {
 	 * Updates the undo and redo button to be enable or disabled after a action
 	 */
 	private void treeUpdate() {
-		History history = History.getInstance();
+		History<Folder> history = History.getInstance();
 		buttonPanel.setEnabledRedoButton(history.canRedo());
 		buttonPanel.setEnabledUndoButton(history.canUndo());
 	}

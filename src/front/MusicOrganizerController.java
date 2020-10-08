@@ -4,8 +4,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Set;
 
-import javax.swing.JOptionPane;
-
 import backend.Folder;
 import backend.History;
 import backend.SoundClip;
@@ -119,7 +117,7 @@ public class MusicOrganizerController {
 	 * Performs the undo action when users click undo button
 	 */
 	public void undo() {
-		History history = History.getInstance();
+		History<Folder> history = History.getInstance();
 		try {
 			history.undo();
 			view.onClipsUpdated();
@@ -133,7 +131,7 @@ public class MusicOrganizerController {
 	 * Performs the redo action when users click redo button
 	 */
 	public void redo() {
-		History history = History.getInstance();
+		History<Folder> history = History.getInstance();
 		try {
 			history.redo();
 			view.onClipsUpdated();

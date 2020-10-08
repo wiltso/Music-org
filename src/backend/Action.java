@@ -6,16 +6,14 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-import backend.Factory.ActionFactory;
-
-public class Action {
-	private Folder object;
-	private Set<Folder> objects;
+public class Action<E> {
+	private E object;
+	private Set<E> objects;
 	private Object parameter;
 	private String functionName;
 	private String undoFunctionName;
 	
-	public Action (Folder folderObject, Set<Folder> folderObjects, Object parameter, String function, String undoFunction) {
+	public Action (E folderObject, Set<E> folderObjects, Object parameter, String function, String undoFunction) {
 		object = folderObject;
 		objects = folderObjects;
 		this.parameter = parameter;
@@ -26,15 +24,15 @@ public class Action {
 	/*
 	 * Gets the iterator for the objects that the action or the undo action need to be done on
 	 */
-	public Iterator<Folder> getObjects() {
+	public Iterator<E> getObjects() {
 		return objects.iterator(); 
 	}
 	/*
 	 * Gets a iterator for all the folder in the action
 	 * This means it concatenates the objects and object and creates a iterator on the combined set
 	 */
-	public Iterator<Folder> getAllObjects() {
-		Set<Folder> objectsCopy = new HashSet<Folder>(objects);
+	public Iterator<E> getAllObjects() {
+		Set<E> objectsCopy = new HashSet<E>(objects);
 		objectsCopy.add(object);
 		return objectsCopy.iterator(); 
 	}
@@ -52,8 +50,8 @@ public class Action {
 	 */
 	public void undo() throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		toggleActionCreator(false);
-		Iterator<Folder> itr = getAllObjects();
-		Folder objectToRun;
+		Iterator<E> itr = getAllObjects();
+		E objectToRun;
 	    while(itr.hasNext()) {
 	    	objectToRun = itr.next();
 	    	Method setNameMethod = objectToRun.getClass().getMethod(undoFunctionName, parameter.getClass());

@@ -8,7 +8,6 @@ import java.util.Set;
 import backend.Factory.ActionFactory;
 import backend.interfaces.HierarchyIF;
 import front.MusicOrganizerController;
-import front.MusicOrganizerWindow;
 
 public class Folder implements HierarchyIF<Folder> {
 
@@ -17,7 +16,7 @@ public class Folder implements HierarchyIF<Folder> {
 	private List<Folder> subFolders;
 	private List<SoundClip> songList;
 	private MusicOrganizerController controller;
-	private final ActionFactory actionFactory;
+	private final ActionFactory<Folder> actionFactory;
 
 	public Folder(String folderName, Folder parent, MusicOrganizerController controller) {
 		assert folderName != null;
@@ -26,7 +25,7 @@ public class Folder implements HierarchyIF<Folder> {
 		this.controller = controller;
 		this.subFolders = new ArrayList<Folder>();
 		this.songList = new ArrayList<SoundClip>();
-		actionFactory = new ActionFactory();
+		actionFactory = new ActionFactory<Folder>();
 	}
 	
 	/*

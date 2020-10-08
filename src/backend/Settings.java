@@ -1,7 +1,5 @@
 package backend;
 
-import backend.Factory.ActionFactory;
-
 public class Settings {
 	private volatile static Settings instance;
 	public boolean canCreateActions;

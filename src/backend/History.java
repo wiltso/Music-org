@@ -2,36 +2,30 @@ package backend;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
-public class History {
+public class History<E> {
 	
-	private volatile static History instance;
-	private List<Action> historyLog;
+	private volatile static History<Folder> instance;
+	private List<Action<E>> historyLog;
 	private int placeInHistory;
 
 	// Change this int to change the amount of actions stored in the history
 	private final int maxUndoActions = 20;
 
 	private History() {
-		historyLog = new ArrayList<Action>();
+		historyLog = new ArrayList<Action<E>>();
 		placeInHistory = -1;
 	}
 	
 	/*
 	 * Insures that there can only be one history
 	 */
-	public static History getInstance() {
+	public static History<Folder> getInstance() {
 		if (instance == null) {
 			synchronized (History.class) {
 				if (instance == null) {
-					instance = new History();
+					instance = new History<Folder>();
 				}
 			}
 		}
@@ -44,7 +38,7 @@ public class History {
 	 * like add a sub album the redo for that action goes away.
 	 * Also insures that there is a limit on the amount of actions in the history
 	 */
-	public void addHistory(Action action) {
+	public void addHistory(Action<E> action) {
 		while (placeInHistory + 1 != historyLog.size()) {
 			historyLog.remove(historyLog.size() - 1);
 		}
@@ -78,7 +72,7 @@ public class History {
 		assert placeInHistory < historyLog.size();
 		assert placeInHistory > 0;
 
-		Action action = historyLog.get(placeInHistory);
+		Action<E> action = historyLog.get(placeInHistory);
 		action.undo();
 		placeInHistory = placeInHistory - 1;
 	}
@@ -91,7 +85,7 @@ public class History {
 		assert placeInHistory < historyLog.size() - 2;
 
 		placeInHistory = placeInHistory + 1;
-		Action action = historyLog.get(placeInHistory);
+		Action<E> action = historyLog.get(placeInHistory);
 		action.execute();
 	}
 	
