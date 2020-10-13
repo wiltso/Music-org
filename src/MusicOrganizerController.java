@@ -249,12 +249,16 @@ public class MusicOrganizerController {
 			int rating = Integer.parseInt(ratingstring);
 			if (rating < 4) {
 				for(SoundClip sc: selectedSoundClips) {
+					sc.soundClipRated();
+					sc.setRating(rating);
 					if (greatSoundClips.getSongs().contains(sc)) {
 						greatSoundClips.deleteSong(sc);
 					}
 				}
 			} else {
 				for(SoundClip sc: selectedSoundClips) {
+					sc.soundClipRated();
+					sc.setRating(rating);
 					if (!greatSoundClips.getSongs().contains(sc) ) {
 						greatSoundClips.addSong(sc);
 					}
