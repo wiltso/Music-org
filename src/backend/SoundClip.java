@@ -11,6 +11,7 @@ public class SoundClip {
 
 	private final File file;
 	private boolean flaggedSoundClip;
+	private boolean ratedSoundClip;
 	private int rating;
 	
 	/**
@@ -21,7 +22,8 @@ public class SoundClip {
 		assert file != null;
 		this.file = file;
 		this.flaggedSoundClip = false;
-		this.rating = 3;
+		this.ratedSoundClip = false;
+		this.rating = 0;
 	}
 
 	/**
@@ -32,8 +34,12 @@ public class SoundClip {
 	}
 	
 	public String toString(){
-		if(flaggedSoundClip) {
+		if (flaggedSoundClip && ratedSoundClip) {
+			return file.getName() + " F " + rating;
+		} else if (flaggedSoundClip) {
 			return file.getName() + " F";
+		} else if (ratedSoundClip) {
+			return file.getName() + " " + rating;
 		} else {
 			return file.getName();
 		}
@@ -49,6 +55,10 @@ public class SoundClip {
 	
 	public void setRating(int rating) {
 		this.rating = rating;
+	}
+	
+	public void soundClipRated() {
+		this.ratedSoundClip = true;
 	}
 	
 	public int getRating() {
