@@ -112,10 +112,9 @@ public class MusicOrganizerWindow extends JFrame {
 				// if left-double-click @@@changed =2 to ==1
 				if (e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 2){
 					
-					if (getSelectedAlbum() == null) {
-						System.out.println("MISSED");
+					if (getSelectedAlbum() != null) {
+						clipTable.display(getSelectedAlbum());
 					}
-					clipTable.display(getSelectedAlbum());
 					
 				} else if(e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() ==1) {
 					
