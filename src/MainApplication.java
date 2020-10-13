@@ -1,4 +1,3 @@
-package front;
 
 import javax.swing.SwingUtilities;
 
@@ -10,7 +9,7 @@ public class MainApplication {
 	 * the folder where to find the desired WAV files to use in the application.
 	 */
 	public static void main(String[] args) {
-
+		
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 
@@ -27,5 +26,4 @@ public class MainApplication {
 			}
 		});
 	}
-
 }

@@ -1,4 +1,3 @@
-package front;
 
 import java.awt.Dimension;
 import java.awt.event.MouseEvent;
@@ -17,7 +16,8 @@ import javax.swing.tree.DefaultTreeSelectionModel;
 import javax.swing.tree.TreePath;
 
 import backend.Folder;
-import backend.History;
+import backend.FolderABS;
+import backend.RootFolder;
 import backend.SoundClip;
 
 
@@ -44,6 +44,7 @@ public class MusicOrganizerWindow extends JFrame {
 		
 		// make the album tree
 		albumTree = makeCatalogTree();
+		albumTree.setRootVisible(false);
 		
 		// make the clip table
 		clipTable = makeClipTable();
@@ -75,7 +76,23 @@ public class MusicOrganizerWindow extends JFrame {
 		
 
 		DefaultMutableTreeNode tree_root = new DefaultMutableTreeNode();
-		tree_root.setUserObject((Folder) controller.getRootAlbum());
+		tree_root.setUserObject((RootFolder) controller.getRootAlbum());
+		
+		//All Sound Clips Node
+		DefaultMutableTreeNode ascNode = new DefaultMutableTreeNode();
+		ascNode.setUserObject(controller.getRootAlbum().getAllSoundClipsFolder());
+		
+		//Great Sound Clips Node
+		DefaultMutableTreeNode gscNode = new DefaultMutableTreeNode();
+		gscNode.setUserObject(controller.getRootAlbum().getGreatSoundClipsFolder());
+		
+		//Flagged Sound Clips Node
+		DefaultMutableTreeNode fscNode = new DefaultMutableTreeNode();
+		fscNode.setUserObject(controller.getRootAlbum().getFlaggedSoundClipsFolder());
+		
+		tree_root.add(ascNode);
+		tree_root.add(gscNode);
+		tree_root.add(fscNode);
 		
 		final JTree tree = new JTree(tree_root);
 		tree.setMinimumSize(new Dimension(200, 400));
@@ -95,11 +112,31 @@ public class MusicOrganizerWindow extends JFrame {
 				// if left-double-click @@@changed =2 to ==1
 				if (e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 2){
 					
-					// TODO YOUR CODE HERE
-					// The code here gets invoked whenever the user double clicks in the album tree
+					if (getSelectedAlbum() == null) {
+						System.out.println("MISSED");
+					}
 					clipTable.display(getSelectedAlbum());
 					
-					System.out.println("show the sound clips for album " + getSelectedTreeNode().getUserObject());
+				} else if(e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() ==1) {
+					
+					if (getSelectedAlbum() != null) {
+						
+						if(getSelectedAlbum().getParent().getClass() == backend.RootFolder.class) {
+							setEnabledAddSoundClipsButton(false);
+							setEnabledRemoveSoundClipsButton(false);
+						} else {
+							setEnabledAddSoundClipsButton(true);
+							setEnabledRemoveSoundClipsButton(true);
+						}
+						
+						if(getSelectedAlbum().getClass() == backend.SearchBasedFolder.class) {
+							setEnabledAddFolderButton(false);
+							setEnabledDeleteFolderButton(false);
+						} else {
+							setEnabledAddFolderButton(true);
+							setEnabledDeleteFolderButton(true);
+						}
+					}
 				}
 			}
 		});
@@ -119,12 +156,7 @@ public class MusicOrganizerWindow extends JFrame {
 				// if left-double-click @@@changed =2 to ==1
 				if (e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 2){
 					
-					// TODO YOUR CODE HERE
-					// The code here gets invoked whenever the uses double clicks on the list of sound clips
 					controller.playSoundClips();
-					
-					System.out.println("clicked on clipTable");
-					
 					
 				}
 			}
@@ -175,10 +207,10 @@ public class MusicOrganizerWindow extends JFrame {
 	 * selection.
 	 * @return the selected album
 	 */
-	public Folder getSelectedAlbum() {
+	public FolderABS getSelectedAlbum() {
 		DefaultMutableTreeNode node = getSelectedTreeNode();
 		if(node != null) {
-			return (Folder) node.getUserObject();
+			return (FolderABS) node.getUserObject();
 		} else {
 			return null;
 		}
@@ -206,13 +238,11 @@ public class MusicOrganizerWindow extends JFrame {
 		DefaultTreeModel model = (DefaultTreeModel) albumTree.getModel();
 		
 		//We search for the parent of the newly added Album so we can create the new node in the correct place
-		for(Enumeration<?> e = ((DefaultMutableTreeNode) model.getRoot()).breadthFirstEnumeration(); e.hasMoreElements();){
+		for(Enumeration e = ((DefaultMutableTreeNode) model.getRoot()).breadthFirstEnumeration(); e.hasMoreElements();){
 			DefaultMutableTreeNode parent = (DefaultMutableTreeNode) e.nextElement();
 			
-			// Get the parent album of newAlbum
 			Folder parentAlbum; 
-			parentAlbum = newAlbum.getParent();
-			
+			parentAlbum = (Folder) newAlbum.getParent();
 			
 			if(parentAlbum.equals(parent.getUserObject())){
 				
@@ -225,7 +255,6 @@ public class MusicOrganizerWindow extends JFrame {
 				
 			}
 		}
-		treeUpdate();
 	}
 	
 	/**
@@ -237,7 +266,7 @@ public class MusicOrganizerWindow extends JFrame {
 		DefaultTreeModel model = (DefaultTreeModel) albumTree.getModel();
 		
 		//We search for the parent node so we update the tree as intended
-		for(Enumeration<?> e = ((DefaultMutableTreeNode) model.getRoot()).breadthFirstEnumeration(); e.hasMoreElements();){
+		for(Enumeration e = ((DefaultMutableTreeNode) model.getRoot()).breadthFirstEnumeration(); e.hasMoreElements();){
 			DefaultMutableTreeNode current = (DefaultMutableTreeNode) e.nextElement();
 			if(album.equals(current.getUserObject())){
 				if(current != null){
@@ -245,28 +274,44 @@ public class MusicOrganizerWindow extends JFrame {
 				}
 			}
 		}
-		treeUpdate();
 	}
 	
 	/**
 	 * When called, the contents of the selected album are displayed in the clipTable
-	 * 
 	 */
 	public void onClipsUpdated(){
-		DefaultMutableTreeNode node = getSelectedTreeNode();
-		if (node != null) {
-			Folder a = (Folder) node.getUserObject();
-			clipTable.display(a);
-		}
-		treeUpdate();
+		FolderABS a = (FolderABS) getSelectedTreeNode().getUserObject();
+		clipTable.display(a);
 	}
 	
-	/*
-	 * Updates the undo and redo button to be enable or disabled after a action
-	 */
-	private void treeUpdate() {
-		History<Folder> history = History.getInstance();
-		buttonPanel.setEnabledRedoButton(history.canRedo());
-		buttonPanel.setEnabledUndoButton(history.canUndo());
+	// Enables/disables "New Album" button
+	public void setEnabledAddFolderButton(boolean state) {
+		buttonPanel.setEnabledNewAlbumButton(state);
 	}
+	
+	// Enables/disables "Remove Album" button
+	public void setEnabledDeleteFolderButton(boolean state) {
+		buttonPanel.setEnabledDeleteAlbumButton(state);
+	}
+	
+	// Enables/disables "Add Sound Clips" button
+	public void setEnabledAddSoundClipsButton(boolean state) {
+		buttonPanel.setEnabledAddSoundClipsButton(state);
+	}
+	
+	// Enables/disables "Remove Sound Clips" button
+	public void setEnabledRemoveSoundClipsButton(boolean state) {
+		buttonPanel.setEnabledRemoveSoundClipsButton(state);
+	}
+	
+	// Enables/disables "Undo" button
+	public void setEnabledUndoButton(boolean state) {
+		buttonPanel.setEnabledUndoButton(state);
+	}
+	
+	// Enables/disables "Redo" button
+	public void setEnabledRedoButton(boolean state) {
+		buttonPanel.setEnabledRedoButton(state);
+	}
+	
 }

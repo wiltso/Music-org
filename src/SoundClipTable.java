@@ -1,5 +1,3 @@
-package front;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -8,6 +6,7 @@ import java.util.Set;
 import javax.swing.JList;
 
 import backend.Folder;
+import backend.FolderABS;
 import backend.SoundClip;
 
 public class SoundClipTable extends JList {
@@ -24,7 +23,7 @@ public class SoundClipTable extends JList {
 	 * Displays the contents of the specified album
 	 * @param a - the album which contents are to be displayed
 	 */
-	public void display(Folder a){
+	public void display(FolderABS a){
 		this.clearTable();
 		clips.addAll(a.getSongs());
 		
