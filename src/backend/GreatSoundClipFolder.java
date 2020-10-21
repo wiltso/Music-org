@@ -17,17 +17,21 @@ public class GreatSoundClipFolder extends SearchBasedFolder {
 	}
 	
 	@Override
-	void updateSongs(SoundClip sc) {
-		int rating = sc.getRating();
-		if(rating < 4) {
-			if(this.getSongs().contains(sc)) {
-				this.deleteSong(sc);
+	public void update(SoundClip sc) {
+		if(sc.isRated()) {
+			int rating = sc.getRating();
+			if(rating < 4) {
+				if(this.getSongs().contains(sc)) {
+					this.deleteSong(sc);
+				}
+			} else {
+				if(!this.getSongs().contains(sc)) {
+					this.addSong(sc);
+				}
 			}
-		} else {
-			if(!this.getSongs().contains(sc)) {
-				this.addSong(sc);
-			}
+			
 		}
+		
 	}
 
 }

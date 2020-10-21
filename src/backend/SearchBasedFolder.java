@@ -2,7 +2,9 @@ package backend;
 
 import java.util.List;
 
-public abstract class SearchBasedFolder extends FolderABS {
+import backend.Observer;
+
+public abstract class SearchBasedFolder extends FolderABS implements Observer {
 
 	private String name;
 	private FolderABS parent;
@@ -12,11 +14,7 @@ public abstract class SearchBasedFolder extends FolderABS {
 		super(folderName, parent);
 	}
 	
-	public final void update(SoundClip sc) {
-		updateSongs(sc);
-	}
-	
-	abstract void updateSongs(SoundClip sc);
+	public abstract void update(SoundClip sc);
 	
 	boolean isFlaggedSong(SoundClip sc) {
 		return false;

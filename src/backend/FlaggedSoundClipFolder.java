@@ -17,7 +17,7 @@ public class FlaggedSoundClipFolder extends SearchBasedFolder {
 	}
 
 	@Override
-	void updateSongs(SoundClip sc) {
+	public void update(SoundClip sc) {
 		boolean isFlagged = sc.isFlagged();
 		if(!isFlagged) {
 			if(this.getSongs().contains(sc)) {
