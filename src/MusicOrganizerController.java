@@ -59,6 +59,8 @@ public class MusicOrganizerController {
 	public Set<SoundClip> loadSoundClips(String path) {
 		Set<SoundClip> clips = SoundClipLoader.loadSoundClips(path);
 		for(SoundClip sc: clips) {
+			sc.registerObserver(flaggedSoundClips);
+			sc.registerObserver(greatSoundClips);
 			root.getAllSoundClipsFolder().addSong(sc);
 		}
 		
@@ -214,7 +216,6 @@ public class MusicOrganizerController {
 		if (!selectedSoundClips.isEmpty()) {
 			for(SoundClip sc: selectedSoundClips) {
 				sc.flagSoundClip();
-				flaggedSoundClips.update(sc);
 			}
 			view.onClipsUpdated();
 		}
@@ -229,7 +230,6 @@ public class MusicOrganizerController {
 		if (!selectedSoundClips.isEmpty()) {
 			for(SoundClip sc: selectedSoundClips) {
 				sc.unflagSoundClip();
-				flaggedSoundClips.update(sc);
 			}
 			view.onClipsUpdated();
 		}
@@ -248,9 +248,7 @@ public class MusicOrganizerController {
 			String ratingstring = (String) JOptionPane.showInputDialog(null, "Choose rating for selected SoundClips", "Rate SoundClips", JOptionPane.QUESTION_MESSAGE, icon, options, options[0]);
 			int rating = Integer.parseInt(ratingstring);
 			for(SoundClip sc: selectedSoundClips) {
-				sc.soundClipRated();
 				sc.setRating(rating);
-				greatSoundClips.update(sc);
 			}
 			
 			view.onClipsUpdated();
