@@ -16,12 +16,4 @@ public abstract class SearchBasedFolder extends FolderABS implements Observer {
 	
 	public abstract void update(SoundClip sc);
 	
-	boolean isFlaggedSong(SoundClip sc) {
-		return false;
-	}
-	
-	boolean isGreatSong(SoundClip sc) {
-		return false;
-	}
-	
 }
