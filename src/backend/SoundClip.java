@@ -34,7 +34,7 @@ public class SoundClip {
 	}
 	
 	public String toString(){
-		if (flaggedSoundClip && ratedSoundClip) {
+		if(flaggedSoundClip && ratedSoundClip) {
 			return file.getName() + " F " + rating;
 		} else if (flaggedSoundClip) {
 			return file.getName() + " F";
@@ -45,6 +45,10 @@ public class SoundClip {
 		}
 	}
 	
+	public boolean isFlagged() {
+		return flaggedSoundClip;
+	}
+	
 	public void flagSoundClip() {
 		flaggedSoundClip = true;
 	}
@@ -53,8 +57,13 @@ public class SoundClip {
 		flaggedSoundClip = false;
 	}
 	
+	public boolean isRated() {
+		return ratedSoundClip;
+	}
+	
 	public void setRating(int rating) {
 		this.rating = rating;
+		soundClipRated();
 	}
 	
 	public void soundClipRated() {

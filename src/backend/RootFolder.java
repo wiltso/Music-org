@@ -20,8 +20,8 @@ public class RootFolder extends FolderABS {
 		super(folderName, parent);
 		this.subFolders = new ArrayList<FolderABS>();
 		this.addChild(new Folder("All Sound Clips", this));
-		this.addChild(new SearchBasedFolder("Great Sound Clips", this));
-		this.addChild(new SearchBasedFolder("Flagged Sound Clips", this));
+		this.addChild(new GreatSoundClipFolder("Great Sound Clips", this));
+		this.addChild(new FlaggedSoundClipFolder("Flagged Sound Clips", this));
 	}
 	
 	/*
