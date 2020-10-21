@@ -214,7 +214,7 @@ public class MusicOrganizerController {
 		if (!selectedSoundClips.isEmpty()) {
 			for(SoundClip sc: selectedSoundClips) {
 				sc.flagSoundClip();
-				flaggedSoundClips.addSong(sc);
+				flaggedSoundClips.update(sc);
 			}
 			view.onClipsUpdated();
 		}
@@ -229,7 +229,7 @@ public class MusicOrganizerController {
 		if (!selectedSoundClips.isEmpty()) {
 			for(SoundClip sc: selectedSoundClips) {
 				sc.unflagSoundClip();
-				flaggedSoundClips.deleteSong(sc);
+				flaggedSoundClips.update(sc);
 			}
 			view.onClipsUpdated();
 		}
@@ -247,23 +247,12 @@ public class MusicOrganizerController {
 			ImageIcon icon = new ImageIcon("icons/favourites_32.png");
 			String ratingstring = (String) JOptionPane.showInputDialog(null, "Choose rating for selected SoundClips", "Rate SoundClips", JOptionPane.QUESTION_MESSAGE, icon, options, options[0]);
 			int rating = Integer.parseInt(ratingstring);
-			if (rating < 4) {
-				for(SoundClip sc: selectedSoundClips) {
-					sc.soundClipRated();
-					sc.setRating(rating);
-					if (greatSoundClips.getSongs().contains(sc)) {
-						greatSoundClips.deleteSong(sc);
-					}
-				}
-			} else {
-				for(SoundClip sc: selectedSoundClips) {
-					sc.soundClipRated();
-					sc.setRating(rating);
-					if (!greatSoundClips.getSongs().contains(sc) ) {
-						greatSoundClips.addSong(sc);
-					}
-				}
+			for(SoundClip sc: selectedSoundClips) {
+				sc.soundClipRated();
+				sc.setRating(rating);
+				greatSoundClips.update(sc);
 			}
+			
 			view.onClipsUpdated();
 		}
 	}
