@@ -1,0 +1,18 @@
+Programmering 4 Uppgift 4
+Ville Hirvisuo och William Lindholm
+
+Vi har ändrat till Command Pattern så att undo/redo funktionerna hanteras genom CommandManager.
+
+Vi har skapat en abstrakt FolderABS klass som är superklass till Folder, RootFolder samt SearchBasedFolder (abstrakt) klasserna.
+Ytterligare, har vi skapat två klasser FlaggedSoundClipFolder och GreatSoundClipFolder som både har SearchBasedFolder som superklass.
+Vi har också skapat två gränssnitt, Observable och Observer.
+
+Vi har ändrat SoundClip klassen så att den har två boolean instansvariabler, en som säger om SoundClip har en flagga och en som säger om SoundClip har betygsatts.
+Vi har valt att lägga till ett stort F samt betyget efter namnet på en SoundClip ifall den har en flagga/betyg.
+
+Vi har valt det andra tillvägagångssättet för att utföra sökningen.
+Enligt Template Method så är SearchBasedFolder klassen abstract och har en abstract metod update().
+GreatSoundClipFolder och FlaggedSoundClipFolder både har sina egna kriterier när en SoundClip ska läggas till respektive album så de overridear update() metoden.
+Vi har också använt Observer Pattern för att möjliggöra upprätthållning av de sökbaserade albumen automatiskt.
+SoundClip klassen implementerar Observable gränssnittet och SearchBasedFolder implementerar Observer gränssnittet.
+På det här sättet kan både GreatSoundClipFolder och FlaggedSoundClipFolder notifieras om användaren lägger till/tar bort en flagga eller betygsätter en viss SoundClip.
